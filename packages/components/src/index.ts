@@ -6,6 +6,7 @@
 
 // Components
 export { Button, buttonVariants, type ButtonProps } from './components/Button'
+export { Typography, typographyVariants, type TypographyProps } from './components/Typography'
 export {
   Card,
   CardHeader,
