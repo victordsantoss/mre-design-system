@@ -42,7 +42,7 @@ export const Intervalo: Story = {
     return (
       <div className="max-w-sm p-4">
         <DatePicker
-          label="Período"
+          label="Data inicial e Data final"
           selectionMode="range"
           valueRange={range}
           onRangeChange={setRange}
