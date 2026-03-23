@@ -1,1 +1,7 @@
-export { Typography, typographyVariants, type TypographyProps } from './Typography'
+export {
+  Typography,
+  typographyLayoutVariants,
+  type TypographyProps,
+  type TypographyVariant,
+  type TypographyWeight,
+} from './Typography'

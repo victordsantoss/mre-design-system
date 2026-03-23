@@ -64,7 +64,13 @@ export {
   type CardFooterProps,
   type CardMediaProps,
 } from './Card'
-export { Typography, typographyVariants, type TypographyProps } from './Typography'
+export {
+  Typography,
+  typographyLayoutVariants,
+  type TypographyProps,
+  type TypographyVariant,
+  type TypographyWeight,
+} from './Typography'
 export {
   Message,
   type MessageProps,
