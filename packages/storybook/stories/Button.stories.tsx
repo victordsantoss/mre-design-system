@@ -68,7 +68,7 @@ const BUTTON_DOCS = [
   '',
   '### Comportamentos',
   '',
-  '- **Hover / ativo:** transições rápidas (`duration-gov-fast`); cores de hover definidas por ênfase e intenção.',
+  '- **Hover / ativo:** transições rápidas (`duration-ds-fast`); cores de hover definidas por ênfase e intenção.',
   '- **`block`:** útil em formulários mobile ou CTAs em coluna única.',
   '- **`asChild`:** delega estilos a um filho (ex.: `Link`) mantendo aparência de botão.',
   '',
