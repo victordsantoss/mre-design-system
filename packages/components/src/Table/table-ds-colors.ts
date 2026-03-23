@@ -11,6 +11,9 @@ import {
 import { alpha } from '../utils/color-alpha'
 import type { DsTableColors } from './types'
 
+/** Fundo do header ordenado — opacidade tipo `--surface-opacity-xs` (PDF GovBR Table). */
+const HEADER_SORTED_BG_ALPHA = 0.1
+
 export function createTableDsLight(): DsTableColors {
   const paper = semanticColorsLight.background.paper
   const text = semanticColorsLight.text.primary
@@ -26,13 +29,16 @@ export function createTableDsLight(): DsTableColors {
     contextualFg: ct,
     contextualBorderBottom: alpha(ct, 0.22),
     headerBg: gray[5],
-    headerTextSortable: pm,
-    headerTextPlain: pm,
+    headerTextSortable: blueWarmVivid[70],
+    headerTextPlain: blueWarmVivid[70],
+    headerSortedFg: blueWarmVivid[80],
+    headerSortedBg: alpha(blueWarmVivid[80], HEADER_SORTED_BG_ALPHA),
     rowBg: paper,
     rowFg: text,
     rowHover: alpha(pm, 0.08),
     rowSelectedBg: pm,
-    rowSelectedFg: ct,
+    /** Texto e ícones em branco sobre fundo primário (GovBR — linha selecionada). */
+    rowSelectedFg: pure[0],
     rowIconColor: pm,
     footerBg: paper,
     footerFg: text,
@@ -52,9 +58,7 @@ export function createTableDsLight(): DsTableColors {
 export function createTableDsDark(): DsTableColors {
   const navy = semanticColorsDark.background.default
   const white = semanticColorsDark.text.primary
-  const pm = semanticColorsDark.interactiveOnDark.main
   const pl = blueWarmVivid[10]
-  const pcon = semanticColorsDark.interactiveOnDark.contrastText
   return {
     outerBg: navy,
     titleFg: white,
@@ -63,13 +67,16 @@ export function createTableDsDark(): DsTableColors {
     contextualFg: white,
     contextualBorderBottom: alpha(white, 0.2),
     headerBg: navy,
-    headerTextSortable: pm,
-    headerTextPlain: white,
+    headerTextSortable: blueWarmVivid[20],
+    headerTextPlain: blueWarmVivid[20],
+    headerSortedFg: pure[0],
+    headerSortedBg: alpha(pure[0], HEADER_SORTED_BG_ALPHA),
     rowBg: navy,
     rowFg: white,
     rowHover: alpha(white, 0.06),
-    rowSelectedBg: pm,
-    rowSelectedFg: pcon,
+    /** Mesmo azul do modo claro (`#1351B4`) — linha selecionada idêntica em ambos os temas. */
+    rowSelectedBg: blueWarmVivid[70],
+    rowSelectedFg: pure[0],
     rowIconColor: pl,
     footerBg: navy,
     footerFg: white,

@@ -17,6 +17,13 @@ export const TableSectionContext = React.createContext<TableSectionState>(DEFAUL
 
 export const TableColorsContext = React.createContext<DsTableColors | null>(null)
 
+/** Linha do corpo selecionada — usado para texto/ícones brancos no fundo primário (GovBR). */
+export const TableRowSelectionContext = React.createContext<boolean>(false)
+
+export function useTableRowSelected(): boolean {
+  return React.useContext(TableRowSelectionContext)
+}
+
 export function useItamaratyTableSection(): TableSectionState {
   return React.useContext(TableSectionContext)
 }

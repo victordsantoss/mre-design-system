@@ -87,12 +87,12 @@ export function TablePaginationBar({
 
   const selectClass = cn(
     'cursor-pointer border-0 bg-transparent py-0 pl-0 pr-1 text-base font-medium leading-normal',
-    'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+    'focus:outline-none focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px] focus-visible:ring-offset-background',
   )
 
   const navBtnClass = cn(
     'inline-flex items-center justify-center rounded p-1.5 transition-colors',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px] focus-visible:ring-offset-background',
     'disabled:pointer-events-none disabled:opacity-40',
   )
 
@@ -101,7 +101,7 @@ export function TablePaginationBar({
       role="navigation"
       aria-label="Paginação da tabela"
       className={cn(
-        'flex min-h-12 flex-nowrap items-center gap-0 font-body text-base',
+        'flex min-h-12 shrink-0 flex-nowrap items-center gap-0 font-body text-base',
         className,
       )}
       style={{

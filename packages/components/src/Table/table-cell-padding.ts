@@ -1,24 +1,31 @@
 import type { CSSProperties } from 'react'
+import { spacingLayout } from '@ds/tokens'
 import type { TableDensity, TablePaddingSlot } from './types'
 
+const { base, '2x': s2x, '3x': s3x } = spacingLayout
+
+/**
+ * Paddings alinhados ao PDF GovBR Table (densidade padrão / baixa / alta).
+ * Valores em px a partir de `spacingLayout` (@ds/tokens).
+ */
 const TABLE_CELL_PADDING: Record<TableDensity, Record<TablePaddingSlot, CSSProperties>> = {
   default: {
-    title: { padding: '16px 16px' },
-    header: { padding: '16px 24px' },
-    row: { padding: '16px 24px' },
-    footer: { padding: '16px 16px' },
+    title: { paddingTop: s2x, paddingBottom: s2x, paddingLeft: s2x, paddingRight: s2x },
+    header: { paddingTop: s2x, paddingBottom: s2x, paddingLeft: s3x, paddingRight: s3x },
+    row: { paddingTop: s2x, paddingBottom: s2x, paddingLeft: s3x, paddingRight: s3x },
+    footer: { paddingTop: s2x, paddingBottom: s2x, paddingLeft: s2x, paddingRight: s2x },
   },
   comfortable: {
-    title: { padding: '24px 16px' },
-    header: { padding: '24px 24px' },
-    row: { padding: '24px 24px' },
-    footer: { padding: '24px 16px' },
+    title: { paddingTop: s3x, paddingBottom: s3x, paddingLeft: s2x, paddingRight: s2x },
+    header: { paddingTop: s3x, paddingBottom: s3x, paddingLeft: s3x, paddingRight: s3x },
+    row: { paddingTop: s3x, paddingBottom: s3x, paddingLeft: s3x, paddingRight: s3x },
+    footer: { paddingTop: s3x, paddingBottom: s3x, paddingLeft: s2x, paddingRight: s2x },
   },
   compact: {
-    title: { padding: '8px 16px' },
-    header: { padding: '8px 24px' },
-    row: { padding: '8px 24px' },
-    footer: { padding: '8px 16px' },
+    title: { paddingTop: base, paddingBottom: base, paddingLeft: s2x, paddingRight: s2x },
+    header: { paddingTop: s2x, paddingBottom: s2x, paddingLeft: s3x, paddingRight: s3x },
+    row: { paddingTop: base, paddingBottom: base, paddingLeft: s3x, paddingRight: s3x },
+    footer: { paddingTop: base, paddingBottom: base, paddingLeft: s2x, paddingRight: s2x },
   },
 }
 

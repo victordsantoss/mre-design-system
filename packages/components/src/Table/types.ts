@@ -26,6 +26,9 @@ export interface DsTableColors {
   headerBg: string
   headerTextSortable: string
   headerTextPlain: string
+  /** Cabeçalho de coluna no estado ordenado (GovBR — cor + fundo com opacidade) */
+  headerSortedFg: string
+  headerSortedBg: string
   rowBg: string
   rowFg: string
   rowHover: string
