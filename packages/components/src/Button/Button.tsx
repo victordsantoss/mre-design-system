@@ -1,54 +1,41 @@
 'use client'
 /**
  * Button — Padrão Digital de Governo (GovBR)
- * Source: Padrão Digital de Governo - Botão
- *
- * Ênfases:
- *   primary   → fundo sólido (ação principal)
- *   secondary → borda + fundo transparente (ação secundária)
- *   tertiary  → apenas texto (ação terciária/suporte)
- *
- * Densidade (altura):
- *   xsmall (24px) | small (32px) | medium (40px, padrão) | large (48px)
- *
- * Intenção semântica:
- *   default | danger | success | warning | info
- *
- * Pill radius e focus ring 3px/4px — marca visual GovBR.
+ * Anatomia: ícone opcional, rótulo obrigatório (exceto CircleButton), superfície por ênfase.
+ * Tokens: tipografia/ícone/padding/spacing/pill conforme globals do DS — ver Storybook «Components/Button» para guia de uso.
  */
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '../utils/cn'
 
-// ─────────────────────────────────────────────
-// Variantes base (CVA)
-// ─────────────────────────────────────────────
-
 const buttonVariants = cva(
   [
-    // Pill radius — marca visual dos botões GovBR
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-pill',
-    'font-semibold text-gov-base leading-none',
+    'inline-flex items-center justify-center whitespace-nowrap rounded-pill',
+    'px-[var(--spacing-scale-3x)] gap-[var(--spacing-scale-base)]',
+    'text-[var(--font-size-scale-up-01)] font-[var(--font-weight-semi-bold)] leading-[var(--font-lineheight-low)]',
+    'normal-case tracking-normal',
+    '[&_svg]:h-[var(--icon-size-base)] [&_svg]:w-[var(--icon-size-base)] [&_svg]:shrink-0',
     'transition-colors duration-gov-fast',
-    // Focus ring GovBR: 3px outline, 4px offset
     'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
     'disabled:pointer-events-none disabled:opacity-45',
-    '[&_svg]:pointer-events-none [&_svg]:shrink-0',
+    '[&_svg]:pointer-events-none',
   ].join(' '),
   {
     variants: {
-      /** Ênfase: primary (filled) | secondary (outlined) | tertiary (text) */
       emphasis: {
         primary:
           'bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-hover',
         secondary:
-          'bg-transparent text-primary border border-primary hover:bg-primary/10 hover:border-primary-hover hover:text-primary-hover active:bg-primary/15',
+          [
+            'bg-pure-0 text-primary border border-primary',
+            'hover:bg-primary/10 hover:border-primary-hover hover:text-primary-hover active:bg-primary/15',
+            'dark:bg-background',
+          ].join(' '),
         tertiary:
           'bg-transparent text-primary border-0 hover:bg-primary/10 active:bg-primary/15',
       },
 
-      /** Intenção semântica (sobrepõe cores de emphasis) */
       intent: {
         default: '',
         danger:
@@ -61,15 +48,13 @@ const buttonVariants = cva(
           'data-[emphasis=primary]:bg-info data-[emphasis=primary]:text-info-foreground data-[emphasis=primary]:hover:bg-info/85 data-[emphasis=secondary]:text-info data-[emphasis=secondary]:border-info data-[emphasis=secondary]:hover:bg-info/10 data-[emphasis=tertiary]:text-info data-[emphasis=tertiary]:hover:bg-info/10',
       },
 
-      /** Densidade: define altura e padding horizontal */
+      /** GovBR: 32px (alta) | 40px (padrão) | 48px (baixa) */
       density: {
-        xsmall: 'h-6 min-h-6 px-4 text-[0.729rem]',
-        small:  'h-8 min-h-8 px-4 text-gov-sm',
-        medium: 'h-10 min-h-10 px-6',
-        large:  'h-12 min-h-12 px-6 text-gov-lg',
+        small:  'h-8 min-h-8',
+        medium: 'h-10 min-h-10',
+        large:  'h-12 min-h-12',
       },
 
-      /** Largura 100% do container */
       block: {
         true:  'w-full',
         false: '',
@@ -84,46 +69,28 @@ const buttonVariants = cva(
   },
 )
 
-// ─────────────────────────────────────────────
-// Tipos públicos
-// ─────────────────────────────────────────────
-
 export type ButtonEmphasis = 'primary' | 'secondary' | 'tertiary'
-export type ButtonDensity  = 'xsmall' | 'small' | 'medium' | 'large'
+export type ButtonDensity  = 'small' | 'medium' | 'large'
 export type ButtonIntent   = 'default' | 'danger' | 'success' | 'warning' | 'info'
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  /** Ênfase do botão: primary (filled) | secondary (outlined) | tertiary (text) */
   emphasis?: ButtonEmphasis
-  /** Densidade/altura: xsmall(24) | small(32) | medium(40) | large(48) */
   density?: ButtonDensity
-  /** Intenção semântica */
   intent?: ButtonIntent
-  /** Largura 100% */
   block?: boolean
-  /** Slot pattern — renderiza filho como elemento raiz */
   asChild?: boolean
-  /** Estado de carregamento */
   loading?: boolean
-  /** Ícone antes do label */
   startIcon?: React.ReactNode
-  /** Ícone após o label */
   endIcon?: React.ReactNode
 }
 
-// Spinner SVG tamanhos por densidade
 const SPINNER_SIZE: Record<ButtonDensity, number> = {
-  xsmall: 12,
   small:  14,
-  medium: 18,
-  large:  22,
+  medium: 16,
+  large:  18,
 }
-
-// ─────────────────────────────────────────────
-// Button Component
-// ─────────────────────────────────────────────
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -188,18 +155,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button'
 
-// ─────────────────────────────────────────────
-// CircleButton — botão circular de ícone
-// aria-label obrigatório (GovBR / WCAG 2.2)
-// ─────────────────────────────────────────────
-
 const circleButtonVariants = cva(
   [
     'inline-flex items-center justify-center rounded-full',
+    '[&_svg]:h-[var(--icon-size-base)] [&_svg]:w-[var(--icon-size-base)] [&_svg]:shrink-0',
     'transition-colors duration-gov-fast',
     'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
     'disabled:pointer-events-none disabled:opacity-45',
-    '[&_svg]:pointer-events-none [&_svg]:shrink-0',
+    '[&_svg]:pointer-events-none',
   ].join(' '),
   {
     variants: {
@@ -211,10 +174,9 @@ const circleButtonVariants = cva(
         info:    'bg-info text-info-foreground hover:bg-info/85',
       },
       density: {
-        xsmall: 'h-6 w-6',
-        small:  'h-8 w-8',
-        medium: 'h-10 w-10',
-        large:  'h-12 w-12',
+        small:  'h-8 w-8 min-h-8 min-w-8',
+        medium: 'h-10 w-10 min-h-10 min-w-10',
+        large:  'h-12 w-12 min-h-12 min-w-12',
       },
     },
     defaultVariants: {
@@ -230,7 +192,6 @@ export interface CircleButtonProps
   density?: ButtonDensity
   intent?: ButtonIntent
   loading?: boolean
-  /** Obrigatório — acessibilidade GovBR */
   'aria-label': string
 }
 

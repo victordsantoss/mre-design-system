@@ -18,38 +18,38 @@ scripts/
 
 ## Stack
 
-- **Monorepo**: npm workspaces (Node >= 20)
+- **Monorepo**: Yarn 1 workspaces (`packageManager: yarn@1.22.22`, Node >= 20)
 - **Componentes**: React 18+ / TypeScript / padrão shadcn/ui (Radix UI + CVA)
 - **Styling**: Tailwind CSS com CSS custom properties (suporte a tema light/dark via `darkMode: 'class'`)
 - **Design**: Padrão Digital de Governo (GovBR) — fonte Rawline/Raleway, cores GovBR canônicas
 - **Build**: tsup (ESM + CJS + dts)
 - **Testes**: Vitest + React Testing Library
 - **Versionamento**: Changesets (`@ds/storybook` ignorado nos releases)
-- **Registry privado**: Verdaccio (Docker) — `npm run verdaccio:up`
+- **Registry privado**: Verdaccio (Docker) — `yarn verdaccio:up`
 
 ## Comandos principais
 
 ```bash
-npm install            # instala todas as dependências do monorepo
-npm run build          # build de todos os pacotes
-npm run dev            # dev mode em todos os pacotes
-npm run test           # roda testes em todos os pacotes
-npm run storybook      # inicia Storybook (porta padrão 6006)
-npm run build-storybook
-npm run clean
+yarn install           # instala todas as dependências do monorepo
+yarn build             # build de @ds/tokens e @ds/components
+yarn dev               # tsup --watch em tokens e components (paralelo)
+yarn test              # testes em @ds/components
+yarn storybook         # inicia Storybook (porta padrão 6006)
+yarn build-storybook
+yarn clean
 
 # Verdaccio (registry privado)
-npm run verdaccio:up       # sobe o container Docker
-npm run verdaccio:down     # derruba o container
-npm run verdaccio:add-user # adiciona usuário ao registry
-npm run publish:local      # build + publica pacotes no Verdaccio local
+yarn verdaccio:up        # sobe o container Docker
+yarn verdaccio:down      # derruba o container
+yarn verdaccio:add-user  # adiciona usuário ao registry (yarn login)
+yarn publish:local       # build + publica pacotes no Verdaccio local
 ```
 
 Para rodar em um pacote específico:
 
 ```bash
-npm run test -w @ds/components
-npm run build -w @ds/tokens
+yarn workspace @ds/components test
+yarn workspace @ds/tokens run build
 ```
 
 ## Design tokens GovBR
@@ -179,9 +179,9 @@ Props TableRoot: `density` (default|comfortable|compact), `cellDividers` (horizo
 Usar Changesets para releases:
 
 ```bash
-npx changeset        # criar changeset
-npx changeset version # bump de versões
-npx changeset publish # publicar pacotes
+yarn changeset         # criar changeset (@changesets/cli no root)
+yarn changeset version # bump de versões
+yarn changeset publish # publicar pacotes
 ```
 
 `@ds/storybook` não é publicado (ignorado no config do Changesets).
@@ -193,17 +193,18 @@ O registry privado permite distribuição interna dos pacotes `@ds/*`.
 ### Subir o registry
 
 ```bash
-npm run verdaccio:up      # inicia em http://localhost:4873
-npm run verdaccio:add-user # cria usuário (primeira vez)
-npm login --registry http://localhost:4873
-npm run publish:local     # build + publica @ds/tokens e @ds/components
+yarn verdaccio:up       # inicia em http://localhost:4873
+yarn verdaccio:add-user # cria usuário (primeira vez) — `yarn login --registry`
+yarn publish:local      # build + publica @ds/tokens e @ds/components
 ```
+
+(O login no Verdaccio também pode ser feito com `yarn login --registry http://localhost:4873`.)
 
 ### Usar em outro projeto
 
 ```bash
-# .npmrc do projeto consumidor
+# .npmrc do projeto consumidor (Yarn lê as mesmas entradas de escopo)
 @ds:registry=http://localhost:4873
 
-npm install @ds/components @ds/tokens
+yarn add @ds/components @ds/tokens
 ```

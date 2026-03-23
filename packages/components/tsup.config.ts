@@ -20,5 +20,6 @@ export default defineConfig([
     dts: true,
     outDir: 'dist',
     sourcemap: false,
+    external: ['@ds/tokens'],
   },
 ])

@@ -1,25 +1,11 @@
 /**
- * Card — Padrão Digital de Governo (GovBR)
- *
- * Superfície branca com sombra que agrupa conteúdo de um único assunto.
- *
- * Anatomia (3 áreas opcionais, qualquer ordem):
- *   CardHeader  → títulos, subtítulos, ícones, avatares, tags
- *   CardContent → qualquer conteúdo (exceto navegação)
- *   CardActions → exclusivo para botões e links
- *
- * Props extras:
- *   hover       → habilita estado interativo (cursor + overlay ao hover)
- *   disabled    → estado desativado (aria-disabled + visual)
- *   fixedHeight → altura fixa com scroll interno no CardContent
- *   contentHeight → valor em px para a altura fixa (default 250)
+ * Card — GovBR (superfície + área mínima de conteúdo)
+ * Blocos: CardHeader (títulos), CardContent, CardActions/CardFooter (ações), CardMedia (sangria).
+ * Tokens: `--pure-0`, `--color-border`, `--shadow-card`, `--shadow-popover` (hover), `--card-padding` (16px), `--card-icon-padding` (8px).
+ * Ver Storybook «Components/Card» para anatomia, margens, dimensões e boas práticas.
  */
 import * as React from 'react'
 import { cn } from '../utils/cn'
-
-// ─────────────────────────────────────────────
-// Context — compartilha fixedHeight com CardContent
-// ─────────────────────────────────────────────
 
 interface CardContextValue {
   fixedHeight: boolean
@@ -31,18 +17,16 @@ export const CardContext = React.createContext<CardContextValue>({
   contentHeight: 250,
 })
 
-// ─────────────────────────────────────────────
-// Card (Root)
-// ─────────────────────────────────────────────
-
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Habilita estado hover — indica que o card é interativo/clicável */
+  /** Card clicável / hover (foco visível) */
   hover?: boolean
-  /** Estado desabilitado — adiciona aria-disabled e visual de inatividade */
+  /** Superfície desativada — `aria-disabled` + `--status-disabled-background` */
   disabled?: boolean
-  /** Ativa altura fixa com scroll interno no CardContent */
+  /** Arrastar (feedback visual) — `--status-dragged-background` */
+  dragged?: boolean
+  /** Altura fixa da área de conteúdo (sem rolagem interna; GovBR recomenda evitar scroll no card) */
   fixedHeight?: boolean
-  /** Altura do conteúdo quando fixedHeight=true (padrão: 250px) */
+  /** Altura em px quando `fixedHeight` (padrão 250) */
   contentHeight?: number
 }
 
@@ -52,6 +36,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       className,
       hover = false,
       disabled = false,
+      dragged = false,
       fixedHeight = false,
       contentHeight = 250,
       children,
@@ -64,23 +49,24 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          // Base — superfície branca com borda-radius 8px (md) e sombra card-sm
-          'rounded-md bg-card text-card-foreground shadow-[0_1px_2px_0_rgba(7,29,65,0.08)]',
-          // Transição
-          'transition-[box-shadow,background-image] duration-[300ms] ease-[cubic-bezier(0.42,0,0.58,1)]',
-          // Hover interativo
+          'rounded-md border border-border bg-pure-0 text-card-foreground shadow-[var(--shadow-card)] dark:bg-card dark:text-card-foreground',
+          'transition-[box-shadow,background-color] duration-gov-base ease-[cubic-bezier(0.42,0,0.58,1)]',
           hover && !disabled && [
             'cursor-pointer',
-            'hover:shadow-[0_2px_8px_0_rgba(7,29,65,0.12)]',
-            'hover:bg-[linear-gradient(rgba(19,81,180,0.08),rgba(19,81,180,0.08))]',
-            'active:bg-[linear-gradient(rgba(19,81,180,0.16),rgba(19,81,180,0.16))]',
+            'hover:shadow-[var(--shadow-popover)]',
+            'hover:bg-[linear-gradient(var(--color-card-hover-overlay),var(--color-card-hover-overlay))]',
+            'active:bg-[linear-gradient(var(--color-card-active-overlay),var(--color-card-active-overlay))]',
             'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
           ],
-          // Disabled
-          disabled && 'opacity-45 pointer-events-none cursor-default shadow-none bg-muted',
+          disabled &&
+            'pointer-events-none cursor-not-allowed border-border/50 bg-[var(--status-disabled-background)] shadow-none text-muted-foreground',
+          dragged &&
+            !disabled &&
+            'bg-[var(--status-dragged-background)] ring-2 ring-primary/40 ring-offset-0',
           className,
         )}
         aria-disabled={disabled || undefined}
+        data-dragged={dragged || undefined}
         tabIndex={hover && !disabled ? 0 : undefined}
         onClick={!disabled ? onClick : undefined}
         {...props}
@@ -92,27 +78,35 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 )
 Card.displayName = 'Card'
 
-// ─────────────────────────────────────────────
-// CardHeader — área de títulos
-// padding: 16px lateral+topo, sem padding-bottom
-// ─────────────────────────────────────────────
-
 export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('px-4 pt-4 pb-0', className)}
+      className={cn(
+        'px-[var(--card-padding)] pt-[var(--card-padding)] pb-0',
+        className,
+      )}
       {...props}
     />
   ),
 )
 CardHeader.displayName = 'CardHeader'
 
-// ─────────────────────────────────────────────
-// CardTitle
-// ─────────────────────────────────────────────
+/** Ícone / avatar na área de título — padding 8px (GovBR) */
+export interface CardHeaderIconProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const CardHeaderIcon = React.forwardRef<HTMLDivElement, CardHeaderIconProps>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn('flex shrink-0 p-[var(--card-icon-padding)]', className)}
+      {...props}
+    />
+  ),
+)
+CardHeaderIcon.displayName = 'CardHeaderIcon'
 
 export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
@@ -122,19 +116,12 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
   ({ className, as: Comp = 'h3', ...props }, ref) => (
     <Comp
       ref={ref}
-      className={cn(
-        'text-gov-xl font-semibold leading-[1.15]',
-        className,
-      )}
+      className={cn('text-gov-xl font-semibold leading-[1.15]', className)}
       {...props}
     />
   ),
 )
 CardTitle.displayName = 'CardTitle'
-
-// ─────────────────────────────────────────────
-// CardDescription
-// ─────────────────────────────────────────────
 
 export interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
@@ -149,12 +136,6 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, CardDescriptionPr
 )
 CardDescription.displayName = 'CardDescription'
 
-// ─────────────────────────────────────────────
-// CardContent — área de conteúdo
-// padding: 16px todos os lados
-// Suporte a fixedHeight com scroll interno
-// ─────────────────────────────────────────────
-
 export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
@@ -165,12 +146,12 @@ const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
       <div
         ref={ref}
         className={cn(
-          'p-4',
-          fixedHeight && 'overflow-y-auto scrollbar-thin',
+          'p-[var(--card-padding)]',
+          fixedHeight && 'min-h-0 overflow-hidden',
           className,
         )}
         style={{
-          ...(fixedHeight ? { maxHeight: contentHeight } : {}),
+          ...(fixedHeight ? { height: contentHeight, maxHeight: contentHeight } : {}),
           ...style,
         }}
         {...props}
@@ -180,27 +161,21 @@ const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
 )
 CardContent.displayName = 'CardContent'
 
-// ─────────────────────────────────────────────
-// CardActions — área de ações
-// padding: sem padding-top, 16px lateral+baixo, gap 8px
-// ─────────────────────────────────────────────
-
 export interface CardActionsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const CardActions = React.forwardRef<HTMLDivElement, CardActionsProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex flex-wrap items-center gap-2 px-4 pb-4 pt-0', className)}
+      className={cn(
+        'flex flex-wrap items-center gap-[var(--spacing-scale-base)] px-[var(--card-padding)] pb-[var(--card-padding)] pt-0',
+        className,
+      )}
       {...props}
     />
   ),
 )
 CardActions.displayName = 'CardActions'
-
-// ─────────────────────────────────────────────
-// CardFooter — alias de CardActions (compatibilidade)
-// ─────────────────────────────────────────────
 
 export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -208,25 +183,20 @@ const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex flex-wrap items-center gap-2 px-4 pb-4 pt-0', className)}
+      className={cn(
+        'flex flex-wrap items-center gap-[var(--spacing-scale-base)] px-[var(--card-padding)] pb-[var(--card-padding)] pt-0',
+        className,
+      )}
       {...props}
     />
   ),
 )
 CardFooter.displayName = 'CardFooter'
 
-// ─────────────────────────────────────────────
-// CardMedia — imagem/vídeo (pode sangrar nas bordas)
-// ─────────────────────────────────────────────
-
 export interface CardMediaProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** URL da imagem (renderiza como background-image) */
   image?: string
-  /** Texto alternativo para acessibilidade quando image está presente */
   alt?: string
-  /** Altura do bloco de mídia */
   height?: number | string
-  /** Tag HTML a renderizar */
   component?: 'div' | 'img' | 'video'
 }
 
@@ -263,13 +233,10 @@ const CardMedia = React.forwardRef<HTMLDivElement, CardMediaProps>(
 )
 CardMedia.displayName = 'CardMedia'
 
-// ─────────────────────────────────────────────
-// Exports
-// ─────────────────────────────────────────────
-
 export {
   Card,
   CardHeader,
+  CardHeaderIcon,
   CardTitle,
   CardDescription,
   CardContent,

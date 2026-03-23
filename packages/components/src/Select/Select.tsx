@@ -52,7 +52,7 @@ const DENSITY_HEIGHT: Record<InputDensity, string> = {
 const STATUS_HELPER_COLOR: Record<InputStatus, string> = {
   success: 'text-success',
   error:   'text-destructive',
-  warning: 'text-[#967117]',
+  warning: 'text-[color:var(--color-warning-readable-on-light)]',
   info:    'text-info',
 }
 

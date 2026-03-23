@@ -18,16 +18,43 @@ export {
   fontSizesPx,
   lineHeights,
   letterSpacings,
+  iconSizeVariables,
+  iconSizes,
+  iconSizesPx,
 } from './primitives/typography'
 
 // Primitives — Spacing
 export { spacing, spacingLayout, spacingAdjust, type SpacingToken } from './primitives/spacing'
 
-// Primitives — Borders
-export { borderRadii, borderWidths } from './primitives/borders'
+// Primitives — Borders & superfícies (GovBR)
+export {
+  surfaceBorderDefaultColorHex,
+  surfaceBorderDefaultColorVariable,
+  surfaceBorderVariables,
+  surfaceWidth,
+  surfaceWidthVariables,
+  surfaceRounder,
+  surfaceRounderVariables,
+  getSurfaceBorderVariable,
+  borderRadius,
+  borderWidths,
+  type SurfaceBorderSide,
+  type SurfaceBorderStyle,
+  type SurfaceRounderCorner,
+  type SurfaceRounderKey,
+  type SurfaceWidthKey,
+} from './primitives/borders'
 
 // Primitives — Shadows
 export { shadows } from './primitives/shadows'
+
+// Primitives — Elevação / scrim / overlay (GovBR)
+export {
+  elevation,
+  scrim,
+  interactiveSurfaceOverlay,
+  primaryInteractiveAlpha,
+} from './primitives/elevation'
 
 // Primitives — Transitions
 export {
@@ -44,3 +71,4 @@ export {
 export { govEspecificacao } from './semantic/gov-spec'
 export { semanticColors } from './semantic/colors'
 export { semanticTypography } from './semantic/typography'
+export { surfaceComponent } from './semantic/surfaces'

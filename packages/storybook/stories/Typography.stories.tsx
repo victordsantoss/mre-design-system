@@ -165,7 +165,7 @@ export const TypographyScale: Story = {
         </Typography>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <Typography variant="code-lg">const greeting = "Olá, Design System!"</Typography>
-          <Typography variant="code-md">npm install @ds/components</Typography>
+          <Typography variant="code-md">yarn add @ds/components</Typography>
           <Typography variant="code-sm">{"<Typography variant=\"body-md\" />"}</Typography>
         </div>
       </section>

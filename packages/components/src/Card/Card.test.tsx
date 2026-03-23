@@ -1,8 +1,9 @@
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import {
   Card,
   CardHeader,
+  CardHeaderIcon,
   CardTitle,
   CardDescription,
   CardContent,
@@ -12,103 +13,89 @@ import {
 describe('Card', () => {
   it('renders a basic card', () => {
     render(<Card data-testid="card">Content</Card>)
-    const card = screen.getByTestId('card')
-    expect(card).toBeInTheDocument()
-    expect(card).toHaveTextContent('Content')
+    expect(screen.getByTestId('card')).toHaveTextContent('Content')
   })
 
-  it('renders with default variant (shadow-sm)', () => {
-    render(<Card data-testid="card">Content</Card>)
-    expect(screen.getByTestId('card')).toHaveClass('shadow-sm')
+  it('applies GovBR surface shadow and border tokens', () => {
+    render(<Card data-testid="card">X</Card>)
+    const el = screen.getByTestId('card')
+    expect(el.className).toMatch(/shadow-\[var\(--shadow-card\)\]/)
+    expect(el.className).toMatch(/border-border/)
   })
 
-  it('renders different variants', () => {
-    const { rerender } = render(
-      <Card data-testid="card" variant="elevated">Content</Card>,
-    )
-    expect(screen.getByTestId('card')).toHaveClass('shadow-md')
-
-    rerender(<Card data-testid="card" variant="outline">Content</Card>)
-    expect(screen.getByTestId('card')).toHaveClass('shadow-none')
-
-    rerender(<Card data-testid="card" variant="ghost">Content</Card>)
-    expect(screen.getByTestId('card')).toHaveClass('bg-transparent')
-  })
-
-  it('renders with padding variants', () => {
-    const { rerender } = render(
-      <Card data-testid="card" padding="sm">Content</Card>,
-    )
-    expect(screen.getByTestId('card')).toHaveClass('p-4')
-
-    rerender(<Card data-testid="card" padding="md">Content</Card>)
-    expect(screen.getByTestId('card')).toHaveClass('p-6')
-
-    rerender(<Card data-testid="card" padding="lg">Content</Card>)
-    expect(screen.getByTestId('card')).toHaveClass('p-8')
-  })
-
-  it('renders as interactive', () => {
+  it('hover enables keyboard focus tabIndex', () => {
     render(
-      <Card data-testid="card" interactive>
-        Click me
+      <Card data-testid="card" hover>
+        Hit
       </Card>,
     )
-    const card = screen.getByTestId('card')
-    expect(card).toHaveAttribute('role', 'button')
-    expect(card).toHaveAttribute('tabindex', '0')
-    expect(card).toHaveClass('cursor-pointer')
+    expect(screen.getByTestId('card')).toHaveAttribute('tabindex', '0')
+  })
+
+  it('disabled sets aria-disabled and blocks click', () => {
+    const onClick = vi.fn()
+    render(
+      <Card data-testid="card" disabled onClick={onClick}>
+        X
+      </Card>,
+    )
+    const el = screen.getByTestId('card')
+    expect(el).toHaveAttribute('aria-disabled', 'true')
+    fireEvent.click(el)
+    expect(onClick).not.toHaveBeenCalled()
+  })
+
+  it('dragged sets data attribute', () => {
+    render(
+      <Card data-testid="card" dragged>
+        Drag
+      </Card>,
+    )
+    expect(screen.getByTestId('card')).toHaveAttribute('data-dragged')
   })
 
   it('accepts custom className', () => {
     render(
       <Card data-testid="card" className="custom-class">
-        Content
+        C
       </Card>,
     )
     expect(screen.getByTestId('card')).toHaveClass('custom-class')
   })
 })
 
-describe('Card Compound Components', () => {
-  it('renders a full card composition', () => {
+describe('Card compound', () => {
+  it('renders full composition', () => {
     render(
       <Card data-testid="card">
         <CardHeader>
           <CardTitle>Title</CardTitle>
-          <CardDescription>Description text</CardDescription>
+          <CardDescription>Desc</CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Card content goes here</p>
+          <p>Body</p>
         </CardContent>
         <CardFooter>
-          <button>Action</button>
+          <button type="button">Go</button>
         </CardFooter>
       </Card>,
     )
-
     expect(screen.getByText('Title')).toBeInTheDocument()
-    expect(screen.getByText('Description text')).toBeInTheDocument()
-    expect(screen.getByText('Card content goes here')).toBeInTheDocument()
-    expect(screen.getByText('Action')).toBeInTheDocument()
+    expect(screen.getByText('Body')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Go' })).toBeInTheDocument()
   })
 
-  it('CardTitle renders with custom heading level', () => {
-    render(<CardTitle as="h1">Main Title</CardTitle>)
-    const heading = screen.getByText('Main Title')
-    expect(heading.tagName).toBe('H1')
+  it('CardHeaderIcon renders', () => {
+    render(
+      <CardHeaderIcon data-testid="icon-wrap" aria-hidden>
+        IC
+      </CardHeaderIcon>,
+    )
+    expect(screen.getByTestId('icon-wrap')).toHaveTextContent('IC')
   })
 
-  it('CardTitle defaults to h3', () => {
-    render(<CardTitle>Default Title</CardTitle>)
-    const heading = screen.getByText('Default Title')
-    expect(heading.tagName).toBe('H3')
-  })
-
-  it('CardDescription renders as paragraph', () => {
-    render(<CardDescription>Desc</CardDescription>)
-    const desc = screen.getByText('Desc')
-    expect(desc.tagName).toBe('P')
-    expect(desc).toHaveClass('text-muted-foreground')
+  it('CardTitle as h1', () => {
+    render(<CardTitle as="h1">H</CardTitle>)
+    expect(screen.getByText('H').tagName).toBe('H1')
   })
 })

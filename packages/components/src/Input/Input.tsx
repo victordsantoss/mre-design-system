@@ -107,7 +107,7 @@ const StatusIcons: Record<InputStatus, React.FC<{ className?: string }>> = {
 const STATUS_HELPER_COLOR: Record<InputStatus, string> = {
   success: 'text-success',
   error:   'text-destructive',
-  warning: 'text-[#967117]', // yellowVivid-50 para legibilidade sobre branco
+  warning: 'text-[color:var(--color-warning-readable-on-light)]',
   info:    'text-info',
 }
 

@@ -34,6 +34,10 @@ const config: Config = {
           DEFAULT: 'hsl(var(--warning))',
           foreground: 'hsl(var(--warning-foreground))',
         },
+        info: {
+          DEFAULT: 'hsl(var(--info))',
+          foreground: 'hsl(var(--info-foreground))',
+        },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--muted-foreground))',
@@ -46,11 +50,32 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        pure: {
+          0: 'var(--color-pure-0)',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        pill: 'var(--surface-rounder-pill, 100em)',
+      },
+      transitionDuration: {
+        'gov-fast': '100ms',
+        'gov-base': '300ms',
+      },
+      fontSize: {
+        'gov-xs': ['0.729rem', { lineHeight: '1.45' }],
+        'gov-sm': ['0.875rem', { lineHeight: '1.45' }],
+        'gov-base': ['1.05rem', { lineHeight: '1.45' }],
+        'gov-lg': ['1.26rem', { lineHeight: '1.15' }],
+        'gov-xl': ['1.512rem', { lineHeight: '1.15' }],
+        'gov-2xl': ['1.814rem', { lineHeight: '1.15' }],
+        'gov-3xl': ['2.178rem', { lineHeight: '1.15' }],
+      },
+      boxShadow: {
+        'card-md': '0 2px 8px 0 rgba(7,29,65,0.12)',
+        drawer: '4px 0 16px rgba(0, 0, 0, 0.16)',
       },
     },
   },

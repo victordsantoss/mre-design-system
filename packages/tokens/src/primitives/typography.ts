@@ -128,3 +128,26 @@ export const letterSpacings = {
   /** Usado em h6 e h5 (mobile) que têm text-transform: uppercase */
   uppercase: '0.08em',
 } as const
+
+// ---------------------------------------------------------------------------
+// Icon sizes — --icon-size-* (GovBR — botões, ícones em superfícies)
+// ---------------------------------------------------------------------------
+
+export const iconSizeVariables = {
+  /** Ícone padrão e circular em botões */
+  base: '--icon-size-base',
+  /** Message tipo padrão e ícones de destaque (≈20px) */
+  lg: '--icon-size-lg',
+} as const
+
+export const iconSizes = {
+  /** 16px com html 16px — par com --icon-size-base no CSS */
+  base: '1rem',
+  /** GovBR Message (tipo padrão) — par com --icon-size-lg no CSS */
+  lg: '1.25rem',
+} as const
+
+export const iconSizesPx = {
+  base: 16,
+  lg: 20,
+} as const

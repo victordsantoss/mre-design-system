@@ -5,21 +5,24 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "dev": "npm run dev --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "storybook": "npm run storybook -w @ds/storybook",
-    "build-storybook": "npm run build-storybook -w @ds/storybook",
-    "clean": "npm run clean --workspaces --if-present",
+    "build": "yarn workspace @ds/tokens run build && yarn workspace @ds/components run build",
+    "dev": "yarn workspace @ds/tokens run dev & yarn workspace @ds/components run dev & wait",
+    "test": "yarn workspace @ds/components run test",
+    "storybook": "yarn workspace @ds/storybook run storybook",
+    "build-storybook": "yarn workspace @ds/storybook run build-storybook",
+    "clean": "yarn workspaces run clean",
     "verdaccio:up": "docker compose -f infra/verdaccio/docker-compose.yml up -d",
     "verdaccio:down": "docker compose -f infra/verdaccio/docker-compose.yml down",
     "verdaccio:add-user": "./scripts/add-user.sh",
-    "publish:local": "./scripts/publish-local.sh"
+    "publish:local": "./scripts/publish-local.sh",
+    "changeset": "changeset"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.11",
     "typescript": "^5.7.0"
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }

@@ -1,6 +1,14 @@
 import React, { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { Menu, Button, type MenuFolder } from '@ds/components'
+import { fn } from '@storybook/test'
+import {
+  Menu,
+  Button,
+  type MenuFolder,
+  type MenuDensity,
+  type MenuHeaderMode,
+  type MenuVariant,
+} from '@ds/components'
 
 const MENU_DOCS = `
 Menu de navegação GovBR — variantes **offCanvas** (padrão), **push** e **contextual** (bottom sheet).
@@ -35,10 +43,57 @@ const meta: Meta<typeof Menu> = {
     layout: 'fullscreen',
     docs: { description: { component: MENU_DOCS } },
   },
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['offCanvas', 'push', 'contextual'] satisfies MenuVariant[],
+      table: { category: 'Layout' },
+    },
+    header: {
+      control: 'select',
+      options: ['auto', 'title', 'logo', 'none'] satisfies MenuHeaderMode[],
+      table: { category: 'Cabeçalho' },
+    },
+    density: {
+      control: 'select',
+      options: ['small', 'medium', 'large'] satisfies MenuDensity[],
+      table: { category: 'Layout' },
+    },
+    title: { control: 'text', table: { category: 'Conteúdo' } },
+    activeId: { control: 'text', table: { category: 'Estado' } },
+    width: { control: 'text', table: { category: 'Layout' } },
+  },
 }
 
 export default meta
 type Story = StoryObj<typeof Menu>
+
+export const Playground: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false)
+    return (
+      <div className="p-6">
+        <Button emphasis="primary" onClick={() => setOpen(true)}>
+          Abrir menu
+        </Button>
+        <Menu
+          {...args}
+          open={open}
+          onClose={() => setOpen(false)}
+          folders={sampleFolders}
+        />
+      </div>
+    )
+  },
+  args: {
+    variant: 'offCanvas',
+    title: 'MRE',
+    header: 'auto',
+    density: 'medium',
+    activeId: 'inicio',
+    onItemClick: fn(),
+  },
+}
 
 export const OffCanvas: Story = {
   render: () => {

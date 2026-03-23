@@ -177,8 +177,8 @@ export const semanticTypography = {
   },
 
   /**
-   * Botão — up-01 (16.8px) / semi-bold (600) / low (1.15)
-   * Sem text-transform para seguir a diretriz GovBR de não usar caixa alta em botões
+   * Botão — rótulo (GovBR)
+   * --font-size-scale-up-01 / --fontweight-semi-bold / --font-lineheight-low / text-transform: none
    */
   button: {
     fontFamily: fontFamilies.body,

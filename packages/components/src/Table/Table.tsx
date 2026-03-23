@@ -91,7 +91,7 @@ function TableTitleBar({ title, actions, className }: TableTitleBarProps) {
       }}
     >
       <span
-        className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[1.05rem] font-semibold leading-[1.35]"
+        className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-gov-base font-semibold leading-snug"
         style={{ color: c.titleFg }}
       >
         {title}
@@ -307,7 +307,7 @@ const TableHeaderCell = React.forwardRef<HTMLTableCellElement, TableHeaderCellPr
         type="button"
         onClick={onSortClick}
         className={cn(
-          'inline-flex items-center gap-1 rounded-sm text-[1.05rem] font-semibold',
+          'inline-flex items-center gap-1 rounded-sm text-gov-base font-semibold',
           onSortClick ? 'cursor-pointer' : 'cursor-default',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1',
         )}
@@ -319,7 +319,7 @@ const TableHeaderCell = React.forwardRef<HTMLTableCellElement, TableHeaderCellPr
          <SortNeutralIcon />}
       </button>
     ) : (
-      <span className="text-[1.05rem] font-semibold" style={{ color: c.headerTextPlain }}>
+      <span className="text-gov-base font-semibold" style={{ color: c.headerTextPlain }}>
         {children}
       </span>
     )
@@ -398,7 +398,7 @@ const TableBodyCell = React.forwardRef<HTMLTableCellElement, TableBodyCellProps>
       <td
         ref={ref}
         {...rest}
-        className={cn('align-middle text-[1.05rem] font-medium', showV && 'border-r last:border-r-0', className)}
+        className={cn('align-middle text-gov-base font-medium', showV && 'border-r last:border-r-0', className)}
         style={{
           ...pad,
           borderBottom: `1px solid ${c.divider}`,
@@ -491,7 +491,7 @@ function TableFooterBar({ children, className, style, ...rest }: TableFooterBarP
   return (
     <div
       role="toolbar"
-      className={cn('flex flex-wrap items-center justify-end gap-4 border-t text-[1.05rem] font-medium', className)}
+      className={cn('flex flex-wrap items-center justify-end gap-4 border-t text-gov-base font-medium', className)}
       style={{
         ...pad,
         borderTopColor: c.divider,

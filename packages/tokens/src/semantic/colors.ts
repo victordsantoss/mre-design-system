@@ -53,6 +53,8 @@ export const semanticColors = {
     dark: yellowVivid[50],
     contrastText: gray[90],
     surface: yellowVivid[5],
+    /** Texto/ícone de aviso legível sobre branco — espelhado em `--color-warning-readable-on-light` */
+    readableOnNeutral: yellowVivid[50],
   },
 
   /**

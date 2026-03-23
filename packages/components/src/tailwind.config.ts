@@ -16,9 +16,9 @@
  * ```
  *
  * As variáveis CSS são injetadas pelo DesignSystemProvider (globals.css).
- * Cores GovBR canônicas: #1351B4 (primary), #071D41 (secondary/header),
- * #168821 (success), #FFCD07 (warning), #E52207 (error), #155BCB (info).
+ * Sombras nomeadas vêm de `@ds/tokens` (`elevation`) para manter paridade com o pacote de tokens.
  */
+import { elevation } from '@ds/tokens'
 import type { Config } from 'tailwindcss'
 
 const preset: Partial<Config> = {
@@ -76,11 +76,15 @@ const preset: Partial<Config> = {
           foreground: 'var(--color-card-foreground)',
         },
         overlay: 'var(--color-overlay)',
+        pure: {
+          /** Superfície branca GovBR (--pure-0) */
+          0: 'var(--color-pure-0)',
+        },
       },
 
       borderRadius: {
-        // GovBR border radii — alinhados com @itamaraty-ds/tokens primitives/borders
-        pill: '100em',   // botões (pill radius — marca visual GovBR)
+        // GovBR — botão padrão usa --surface-rounder-pill (globals.css)
+        pill: 'var(--surface-rounder-pill, 100em)',
         none: '0px',
         xs: '2px',
         sm: '4px',
@@ -118,11 +122,11 @@ const preset: Partial<Config> = {
       },
 
       boxShadow: {
-        // Sombras GovBR para cards e modais
-        'card-sm': '0 1px 2px 0 rgba(7,29,65,0.08)',
-        'card-md': '0 2px 8px 0 rgba(7,29,65,0.12)',
-        'popover':  '0 4px 16px 0 rgba(7,29,65,0.16)',
-        'modal':    '0 8px 32px 0 rgba(7,29,65,0.20)',
+        'card-sm': elevation.shadowSm,
+        'card-md': elevation.shadowMd,
+        popover: elevation.popover,
+        modal: elevation.modal,
+        drawer: elevation.drawer,
       },
 
       transitionDuration: {

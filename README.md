@@ -4,7 +4,7 @@ Monorepo contendo o Design System completo com biblioteca de componentes React, 
 
 ## Stack
 
-- **Monorepo**: npm workspaces
+- **Monorepo**: Yarn 1 workspaces
 - **Componentes**: React 18+ / TypeScript / shadcn/ui pattern (Radix UI + CVA)
 - **Styling**: Tailwind CSS com CSS custom properties (temas light/dark)
 - **Build**: tsup (ESM + CJS + dts)
@@ -15,16 +15,16 @@ Monorepo contendo o Design System completo com biblioteca de componentes React, 
 
 ```bash
 # Instalar dependências
-npm install
+yarn install
 
-# Build de todos os pacotes
-npm run build
+# Build de @ds/tokens e @ds/components
+yarn build
 
 # Rodar Storybook
-npm run storybook
+yarn storybook
 
-# Rodar testes
-npm run test
+# Rodar testes (@ds/components)
+yarn test
 ```
 
 ## Estrutura
@@ -41,7 +41,7 @@ packages/
 ### Instalação
 
 ```bash
-npm install @ds/components
+yarn add @ds/components
 ```
 
 ### Configuração Tailwind

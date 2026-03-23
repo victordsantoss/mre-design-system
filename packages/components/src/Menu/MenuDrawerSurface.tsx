@@ -25,7 +25,7 @@ export const MenuDrawerSurface = React.forwardRef<HTMLDivElement, MenuDrawerSurf
       <div
         ref={ref}
         className={cn(
-          'fixed z-[1200] flex flex-col overflow-y-auto bg-background text-foreground shadow-[4px_0_16px_rgba(0,0,0,0.16)] outline-none',
+          'fixed z-[1200] flex flex-col overflow-y-auto bg-background text-foreground shadow-drawer outline-none',
           anchor === 'bottom' && 'max-h-[85vh] rounded-t-xl',
           className,
         )}

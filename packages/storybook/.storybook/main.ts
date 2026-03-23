@@ -3,6 +3,7 @@ import type { StorybookConfig } from '@storybook/react-vite'
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  managerHead: (head) => `${head}<meta name="description" content="Design System GovBR — Ministério das Relações Exteriores (MRE / Itamaraty)" />`,
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-a11y',

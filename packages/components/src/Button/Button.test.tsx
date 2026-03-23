@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Button } from './Button'
+import { Button, CircleButton } from './Button'
 
 describe('Button', () => {
   it('renders with default props', () => {
@@ -8,31 +8,29 @@ describe('Button', () => {
     const button = screen.getByRole('button', { name: 'Click me' })
     expect(button).toBeInTheDocument()
     expect(button).not.toBeDisabled()
+    expect(button).toHaveClass('h-10')
   })
 
-  it('renders with different variants', () => {
-    const { rerender } = render(<Button variant="destructive">Delete</Button>)
-    expect(screen.getByRole('button')).toHaveClass('bg-destructive')
+  it('renders emphasis variants', () => {
+    const { rerender } = render(<Button emphasis="primary">P</Button>)
+    expect(screen.getByRole('button')).toHaveClass('bg-primary')
 
-    rerender(<Button variant="outline">Cancel</Button>)
-    expect(screen.getByRole('button')).toHaveClass('border')
+    rerender(<Button emphasis="secondary">S</Button>)
+    expect(screen.getByRole('button')).toHaveClass('border', 'bg-pure-0')
 
-    rerender(<Button variant="ghost">More</Button>)
-    expect(screen.getByRole('button')).toHaveClass('hover:bg-accent')
-
-    rerender(<Button variant="link">Link</Button>)
-    expect(screen.getByRole('button')).toHaveClass('underline-offset-4')
+    rerender(<Button emphasis="tertiary">T</Button>)
+    expect(screen.getByRole('button')).toHaveClass('border-0', 'bg-transparent')
   })
 
-  it('renders with different sizes', () => {
-    const { rerender } = render(<Button size="sm">Small</Button>)
-    expect(screen.getByRole('button')).toHaveClass('h-9')
+  it('renders density heights (GovBR 32 / 40 / 48)', () => {
+    const { rerender } = render(<Button density="small">S</Button>)
+    expect(screen.getByRole('button')).toHaveClass('h-8')
 
-    rerender(<Button size="lg">Large</Button>)
-    expect(screen.getByRole('button')).toHaveClass('h-11')
+    rerender(<Button density="medium">M</Button>)
+    expect(screen.getByRole('button')).toHaveClass('h-10')
 
-    rerender(<Button size="icon">I</Button>)
-    expect(screen.getByRole('button')).toHaveClass('h-10', 'w-10')
+    rerender(<Button density="large">L</Button>)
+    expect(screen.getByRole('button')).toHaveClass('h-12')
   })
 
   it('handles click events', () => {
@@ -79,5 +77,26 @@ describe('Button', () => {
     const ref = vi.fn()
     render(<Button ref={ref}>Ref</Button>)
     expect(ref).toHaveBeenCalled()
+  })
+})
+
+describe('CircleButton', () => {
+  it('requires aria-label', () => {
+    render(
+      <CircleButton aria-label="Fechar">
+        <span>×</span>
+      </CircleButton>,
+    )
+    expect(screen.getByRole('button', { name: 'Fechar' })).toBeInTheDocument()
+  })
+
+  it('matches square dimensions per density', () => {
+    render(
+      <CircleButton density="medium" aria-label="add">
+        +
+      </CircleButton>,
+    )
+    const btn = screen.getByRole('button')
+    expect(btn).toHaveClass('h-10', 'w-10')
   })
 })

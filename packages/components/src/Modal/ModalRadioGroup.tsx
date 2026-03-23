@@ -3,6 +3,7 @@
  * Grupo de opções com rádio para uso dentro da Modal (GovBR — “por seleção”).
  */
 import * as React from 'react'
+import { spacingAdjust } from '@ds/tokens'
 import { cn } from '../utils/cn'
 import { Typography } from '../Typography'
 
@@ -17,7 +18,7 @@ export interface ModalRadioGroupProps {
   value: string
   onChange: (value: string) => void
   options: ModalRadioOption[]
-  /** Espaçamento vertical entre opções (tailwind gap-y em unidades arbitrárias, padrão ~8px) */
+  /** Espaçamento vertical: múltiplos de `spacingAdjust.half` (4px); padrão 2 → 8px */
   gap?: number
 }
 
@@ -40,7 +41,10 @@ export function ModalRadioGroup({
 }: ModalRadioGroupProps) {
   return (
     <fieldset className="m-0 min-w-0 border-0 p-0">
-      <div className="flex flex-col" style={{ gap: `${gap * 4}px` }}>
+      <div
+        className="flex flex-col"
+        style={{ gap: `${gap * spacingAdjust.half}px` }}
+      >
         {options.map((opt) => (
           <label
             key={opt.value}

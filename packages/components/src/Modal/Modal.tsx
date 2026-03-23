@@ -132,7 +132,7 @@ const Modal = React.forwardRef<HTMLDialogElement, ModalProps>(
         onClose={handleClose}
         className={cn(
           // Scrim GovBR: backdrop azul navy semitransparente
-          'backdrop:bg-[rgba(7,29,65,0.72)]',
+          'backdrop:bg-[var(--color-overlay)]',
           // Painel
           'relative m-auto w-full overflow-hidden bg-background text-foreground',
           'shadow-modal',

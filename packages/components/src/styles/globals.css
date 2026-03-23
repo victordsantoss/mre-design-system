@@ -6,6 +6,9 @@
  * CSS Custom Properties — Padrão Digital de Governo (GovBR)
  * MRE / Itamaraty Design System
  *
+ * Fonte de verdade numérica: pacote `@ds/tokens` (primitives + semantic).
+ * Este ficheiro injeta os mesmos valores como variáveis para Tailwind e componentes.
+ *
  * Cores canônicas GovBR:
  *   Primary:     #1351B4 (Blue Warm Vivid 70)
  *   Secondary:   #071D41 (Blue Warm Vivid 90 — header)
@@ -20,9 +23,47 @@
 
 @layer base {
   :root {
+    /* ── GovBR — tokens usados por botão / superfícies (espelho @ds/tokens) ── */
+    --pure-0:                   #FFFFFF;
+    --blue-warm-vivid-70:       #1351B4;
+    --blue-warm-vivid-90:       #071D41;
+    --blue-warm-vivid-20:       #C5D4EB;
+    --spacing-scale-half:       4px;
+    --spacing-scale-base:       8px;
+    --spacing-scale-2x:         16px;
+    --spacing-scale-3x:         24px;
+    --font-size-scale-base:     0.875rem;
+    --font-size-scale-up-01:    1.05rem;
+    --font-weight-regular:      400;
+    --font-lineheight-low:      1.15;
+    --font-lineheight-medium:   1.45;
+    --font-weight-semi-bold:    600;
+    --icon-size-base:           1rem;
+    --icon-size-lg:             1.25rem;
+    --surface-rounder-pill:     100em;
+
+    /* ── Card (GovBR) ── */
+    --gray-2:                   #F8F8F8;
+    --color-card-back:          var(--gray-2);
+    /* elevation.shadowSm / surfaceComponent */
+    --shadow-sm:                0 1px 2px 0 rgba(7, 29, 65, 0.08);
+    /* elevation.shadowMd / elevation.popover — superfície do card (repouso | hover) */
+    --shadow-card:              0 2px 8px 0 rgba(7, 29, 65, 0.12);
+    --shadow-popover:           0 4px 16px 0 rgba(7, 29, 65, 0.16);
+    --shadow-drawer:            4px 0 16px rgba(0, 0, 0, 0.16);
+    --card-padding:             16px;
+    --card-icon-padding:        8px;
+    --status-disabled-background: #EBEBEB;
+    --status-dragged-background:  #D4E5FF;
+    /* interactiveSurfaceOverlay (@ds/tokens/primitives/elevation) */
+    --color-card-hover-overlay:   rgba(19, 81, 180, 0.08);
+    --color-card-active-overlay:  rgba(19, 81, 180, 0.16);
+
     /* ── Background & Foreground ── */
     --color-background:         #FFFFFF;
     --color-foreground:         #333333;
+    --gray-80:                  #333333;
+    --color-pure-0:             var(--pure-0);
 
     /* ── Card ── */
     --color-card:               #FFFFFF;
@@ -52,6 +93,7 @@
     --color-warning:            #FFCD07;
     --color-warning-foreground: #1B1B1B;
     --color-warning-subtle:     #FFF5C2;
+    --color-warning-readable-on-light: #967117;
 
     /* ── Info — Blue Warm Vivid 60 (#155BCB) ── */
     --color-info:               #155BCB;
@@ -72,13 +114,20 @@
     --color-ring:               #155BCB;
 
     /* ── Overlay / Scrim modal GovBR ── */
+    /* scrim.light */
     --color-overlay:            rgba(7, 29, 65, 0.72);
   }
 
   /* ── Dark theme — FUNDO ESCURO GovBR (Blue Warm Vivid 90) ── */
   .dark {
+    --pure-0:                   #FFFFFF;
+    --blue-warm-vivid-70:       #1351B4;
+    --blue-warm-vivid-90:       #071D41;
+    --blue-warm-vivid-20:       #C5D4EB;
+
     --color-background:         #071D41;
     --color-foreground:         #FFFFFF;
+    --color-pure-0:             var(--pure-0);
 
     --color-card:               #0C326F;
     --color-card-foreground:    #FFFFFF;
@@ -118,7 +167,18 @@
     --color-input:              #4A5A78;
     --color-ring:               #C5D4EB;
 
+    /* scrim.dark */
     --color-overlay:            rgba(7, 29, 65, 0.85);
+
+    --gray-2:                   #F8F8F8;
+    --color-card-back:          var(--gray-2);
+    --shadow-sm:                0 1px 2px 0 rgba(0, 0, 0, 0.25);
+    --shadow-card:              0 2px 12px 0 rgba(0, 0, 0, 0.35);
+    --shadow-popover:           0 4px 20px 0 rgba(0, 0, 0, 0.45);
+    --card-padding:             16px;
+    --card-icon-padding:        8px;
+    --status-disabled-background: #2a3548;
+    --status-dragged-background:  rgba(197, 212, 235, 0.28);
   }
 }
 

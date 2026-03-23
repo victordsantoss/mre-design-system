@@ -1,5 +1,14 @@
 import type { Preview } from '@storybook/react'
+import { create } from '@storybook/theming/create'
 import '../styles/globals.css'
+
+const docsTheme = create({
+  base: 'light',
+  colorPrimary: '#071D41',
+  colorSecondary: '#1351B4',
+  textColor: '#333333',
+  barTextColor: '#333333',
+})
 
 const preview: Preview = {
   parameters: {
@@ -12,6 +21,12 @@ const preview: Preview = {
     layout: 'centered',
     docs: {
       toc: true,
+      theme: docsTheme,
+    },
+    options: {
+      storySort: {
+        order: ['Components', '*'],
+      },
     },
     backgrounds: {
       default: 'light',
