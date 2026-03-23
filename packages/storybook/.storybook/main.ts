@@ -25,6 +25,7 @@ const config: StorybookConfig = {
         alias: {
           ...config.resolve?.alias,
           '@ds/components': path.resolve(__dirname, '../../components/src/index.ts'),
+          '@ds/tokens': path.resolve(__dirname, '../../tokens/src/index.ts'),
         },
       },
     }

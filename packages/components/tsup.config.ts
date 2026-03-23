@@ -9,7 +9,7 @@ export default defineConfig([
     sourcemap: true,
     treeshake: true,
     splitting: false,
-    external: ['react', 'react-dom'],
+    external: ['react', 'react-dom', '@ds/tokens'],
     banner: {
       js: '"use client";',
     },

@@ -2,104 +2,149 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * CSS Custom Properties — Padrão Digital de Governo (GovBR)
+ * MRE / Itamaraty Design System
+ *
+ * Cores canônicas GovBR:
+ *   Primary:     #1351B4 (Blue Warm Vivid 70)
+ *   Secondary:   #071D41 (Blue Warm Vivid 90 — header)
+ *   Interactive dark bg: #C5D4EB (Blue Warm Vivid 20)
+ *   Info:        #155BCB (Blue Warm Vivid 60)
+ *   Success:     #168821 (Green Cool Vivid 50)
+ *   Warning:     #FFCD07 (Yellow Vivid 20)
+ *   Error:       #E52207 (Red Vivid 50)
+ *   Text:        #333333 (Gray 80)
+ *   Background:  #FFFFFF (Pure 0) / Alt: #F8F8F8 (Gray 2)
+ */
+
 @layer base {
   :root {
-    /* Background & Foreground */
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    /* ── Background & Foreground ── */
+    --color-background:         #FFFFFF;
+    --color-foreground:         #333333;
 
-    /* Card */
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    /* ── Card ── */
+    --color-card:               #FFFFFF;
+    --color-card-foreground:    #333333;
 
-    /* Primary */
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
+    /* ── Primary — Blue Warm Vivid 70 (#1351B4) ── */
+    --color-primary:            #1351B4;
+    --color-primary-foreground: #FFFFFF;
+    --color-primary-hover:      #0C326F;
+    --color-primary-subtle:     #D4E5FF;
 
-    /* Secondary */
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
+    /* ── Secondary — Blue Warm Vivid 90 (#071D41) ── */
+    --color-secondary:          #071D41;
+    --color-secondary-foreground: #FFFFFF;
 
-    /* Destructive */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* ── Destructive / Error — Red Vivid 50 (#E52207) ── */
+    --color-destructive:        #E52207;
+    --color-destructive-foreground: #FFFFFF;
+    --color-destructive-subtle: #FDB8AE;
 
-    /* Success */
-    --success: 142.1 76.2% 36.3%;
-    --success-foreground: 210 40% 98%;
+    /* ── Success — Green Cool Vivid 50 (#168821) ── */
+    --color-success:            #168821;
+    --color-success-foreground: #FFFFFF;
+    --color-success-subtle:     #E3F5E1;
 
-    /* Warning */
-    --warning: 38 92% 50%;
-    --warning-foreground: 240 10% 3.9%;
+    /* ── Warning — Yellow Vivid 20 (#FFCD07) ── */
+    --color-warning:            #FFCD07;
+    --color-warning-foreground: #1B1B1B;
+    --color-warning-subtle:     #FFF5C2;
 
-    /* Muted */
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    /* ── Info — Blue Warm Vivid 60 (#155BCB) ── */
+    --color-info:               #155BCB;
+    --color-info-foreground:    #FFFFFF;
+    --color-info-subtle:        #D4E5FF;
 
-    /* Accent */
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    /* ── Muted ── */
+    --color-muted:              #F0F0F0;
+    --color-muted-foreground:   #666666;
 
-    /* Border / Input / Ring */
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 221.2 83.2% 53.3%;
+    /* ── Accent ── */
+    --color-accent:             #F8F8F8;
+    --color-accent-foreground:  #333333;
 
-    /* Radius */
-    --radius: 0.5rem;
+    /* ── Border / Input / Ring ── */
+    --color-border:             #DCDCDC;
+    --color-input:              #DCDCDC;
+    --color-ring:               #155BCB;
+
+    /* ── Overlay / Scrim modal GovBR ── */
+    --color-overlay:            rgba(7, 29, 65, 0.72);
   }
 
+  /* ── Dark theme — FUNDO ESCURO GovBR (Blue Warm Vivid 90) ── */
   .dark {
-    /* Background & Foreground */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --color-background:         #071D41;
+    --color-foreground:         #FFFFFF;
 
-    /* Card */
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --color-card:               #0C326F;
+    --color-card-foreground:    #FFFFFF;
 
-    /* Primary */
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Interactive em fundo escuro: #C5D4EB (Blue Warm Vivid 20) */
+    --color-primary:            #C5D4EB;
+    --color-primary-foreground: #071D41;
+    --color-primary-hover:      #FFFFFF;
+    --color-primary-subtle:     #0C326F;
 
-    /* Secondary */
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --color-secondary:          #374157;
+    --color-secondary-foreground: #FFFFFF;
 
-    /* Destructive */
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --color-destructive:        #EF4E35;
+    --color-destructive-foreground: #FFFFFF;
+    --color-destructive-subtle: #5C1111;
 
-    /* Success */
-    --success: 142.1 70.6% 45.3%;
-    --success-foreground: 144.9 80.4% 10%;
+    --color-success:            #2EA843;
+    --color-success-foreground: #FFFFFF;
+    --color-success-subtle:     #19311E;
 
-    /* Warning */
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 98%;
+    --color-warning:            #FFCD07;
+    --color-warning-foreground: #1B1B1B;
+    --color-warning-subtle:     #422D19;
 
-    /* Muted */
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --color-info:               #98BAE7;
+    --color-info-foreground:    #071D41;
+    --color-info-subtle:        #0C326F;
 
-    /* Accent */
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --color-muted:              #222A38;
+    --color-muted-foreground:   #ADBACF;
 
-    /* Border / Input / Ring */
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 217.2 91.2% 59.8%;
+    --color-accent:             #0C326F;
+    --color-accent-foreground:  #FFFFFF;
+
+    --color-border:             #374157;
+    --color-input:              #4A5A78;
+    --color-ring:               #C5D4EB;
+
+    --color-overlay:            rgba(7, 29, 65, 0.85);
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    /* GovBR: htmlFontSize = 16px (base para rem de 0.875rem = 14px) */
+    font-size: 16px;
   }
 
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'Rawline', 'Raleway', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size: 1.05rem; /* up-01: body GovBR */
+    line-height: 1.45;  /* medium: body/labels GovBR */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Focus ring GovBR: 3px outline, 4px offset ── */
+  :focus-visible {
+    outline: 3px solid var(--color-ring);
+    outline-offset: 4px;
   }
 }

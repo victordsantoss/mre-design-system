@@ -1,65 +1,76 @@
+import React, { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
-import { Button } from '@ds/components'
+import { Button, CircleButton } from '@ds/components'
+import type { ButtonEmphasis, ButtonDensity, ButtonIntent } from '@ds/components'
 
 /**
- * O componente **Button** é o principal elemento de ação do Design System.
+ * O componente **Button** segue o Padrão Digital de Governo (GovBR).
  *
- * Suporta múltiplas variantes visuais, tamanhos, estado de loading,
- * e composição via `asChild` (Radix Slot pattern).
+ * ### Ênfases
+ * - **primary** — ação principal; fundo azul sólido
+ * - **secondary** — ação secundária; contorno azul
+ * - **tertiary** — ação terciária; sem borda, apenas texto
  *
- * ## Uso básico
+ * ### Densidades
+ * `xsmall` (24px) | `small` (32px) | `medium` (40px, padrão) | `large` (48px)
+ *
+ * ### Intenções
+ * `default` | `danger` | `success` | `warning` | `info`
+ *
  * ```tsx
- * import { Button } from '@ds/components'
+ * import { Button, CircleButton } from '@ds/components'
  *
- * <Button variant="default" size="md">
- *   Clique aqui
- * </Button>
+ * <Button emphasis="primary" density="medium">Ação principal</Button>
+ * <Button emphasis="secondary" intent="danger">Cancelar</Button>
+ * <CircleButton aria-label="Fechar">×</CircleButton>
  * ```
  */
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
   component: Button,
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-  },
-  argTypes: {
-    variant: {
-      control: 'select',
-      options: [
-        'default',
-        'secondary',
-        'destructive',
-        'outline',
-        'ghost',
-        'link',
-        'success',
-        'warning',
-      ],
-      description: 'Variante visual do botão',
-      table: {
-        defaultValue: { summary: 'default' },
+    docs: {
+      description: {
+        component: 'Botão GovBR com suporte a ênfases, densidades e intenções.',
       },
     },
-    size: {
+  },
+  argTypes: {
+    emphasis: {
       control: 'select',
-      options: ['sm', 'md', 'lg', 'xl', 'icon'],
-      description: 'Tamanho do botão',
-      table: {
-        defaultValue: { summary: 'md' },
-      },
+      options: ['primary', 'secondary', 'tertiary'] satisfies ButtonEmphasis[],
+      description: 'Nível de ênfase visual',
+      table: { category: 'Aparência', defaultValue: { summary: 'primary' } },
+    },
+    density: {
+      control: 'select',
+      options: ['xsmall', 'small', 'medium', 'large'] satisfies ButtonDensity[],
+      description: 'Tamanho / densidade (altura)',
+      table: { category: 'Aparência', defaultValue: { summary: 'medium' } },
+    },
+    intent: {
+      control: 'select',
+      options: ['default', 'danger', 'success', 'warning', 'info'] satisfies ButtonIntent[],
+      description: 'Intenção semântica (cor)',
+      table: { category: 'Aparência', defaultValue: { summary: 'default' } },
+    },
+    block: {
+      control: 'boolean',
+      description: 'Largura total do container',
+      table: { category: 'Layout' },
     },
     loading: {
       control: 'boolean',
-      description: 'Estado de carregamento',
+      description: 'Estado de carregamento (spinner)',
+      table: { category: 'Estado' },
     },
     disabled: {
       control: 'boolean',
       description: 'Estado desabilitado',
-    },
-    asChild: {
-      control: 'boolean',
-      description: 'Renderiza como elemento filho (Slot pattern)',
+      table: { category: 'Estado' },
     },
   },
   args: {
@@ -68,122 +79,232 @@ const meta: Meta<typeof Button> = {
 }
 
 export default meta
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof Button>
 
 // ─────────────────────────────────────────────
 // Stories
 // ─────────────────────────────────────────────
 
-/** Botão padrão com estilo primário. */
-export const Default: Story = {
+export const Playground: Story = {
   args: {
-    children: 'Button',
+    children: 'Ação principal',
+    emphasis: 'primary',
+    density: 'medium',
+    intent: 'default',
   },
 }
 
-/** Todas as variantes visuais disponíveis. */
-export const AllVariants: Story = {
+export const Enfases: Story = {
+  name: 'Ênfases',
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Button variant="default">Default</Button>
-      <Button variant="secondary">Secondary</Button>
-      <Button variant="destructive">Destructive</Button>
-      <Button variant="outline">Outline</Button>
-      <Button variant="ghost">Ghost</Button>
-      <Button variant="link">Link</Button>
-      <Button variant="success">Success</Button>
-      <Button variant="warning">Warning</Button>
+    <div className="flex flex-wrap gap-3 items-center">
+      <Button emphasis="primary">Primário</Button>
+      <Button emphasis="secondary">Secundário</Button>
+      <Button emphasis="tertiary">Terciário</Button>
     </div>
   ),
-}
-
-/** Todos os tamanhos disponíveis. */
-export const AllSizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-      <Button size="sm">Small</Button>
-      <Button size="md">Medium</Button>
-      <Button size="lg">Large</Button>
-      <Button size="xl">Extra Large</Button>
-      <Button size="icon">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M5 12h14" />
-          <path d="M12 5v14" />
-        </svg>
-      </Button>
-    </div>
-  ),
-}
-
-/** Estado de loading com spinner animado. */
-export const Loading: Story = {
-  args: {
-    children: 'Salvando...',
-    loading: true,
+  parameters: {
+    docs: {
+      description: { story: 'Três ênfases: primário (fundo sólido), secundário (contorno), terciário (texto).' },
+    },
   },
 }
 
-/** Botão desabilitado. */
-export const Disabled: Story = {
-  args: {
-    children: 'Desabilitado',
-    disabled: true,
+export const Intencoes: Story = {
+  name: 'Intenções',
+  render: () => (
+    <div className="flex flex-col gap-4">
+      {(['primary', 'secondary', 'tertiary'] as const).map((emphasis) => (
+        <div key={emphasis} className="flex flex-wrap gap-3 items-center">
+          <span className="w-20 text-xs text-gray-400 capitalize">{emphasis}</span>
+          {(['default', 'danger', 'success', 'warning', 'info'] as const).map((intent) => (
+            <Button key={intent} emphasis={emphasis} intent={intent}>
+              {intent.charAt(0).toUpperCase() + intent.slice(1)}
+            </Button>
+          ))}
+        </div>
+      ))}
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: { story: 'Matriz ênfase × intenção — todas as combinações.' },
+    },
   },
 }
 
-/** Destructive outline — combinação de variantes para ações perigosas com menos ênfase. */
-export const DestructiveOutline: Story = {
+export const Densidades: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '12px' }}>
-      <Button variant="destructive">Deletar</Button>
-      <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50">
-        Cancelar assinatura
-      </Button>
+    <div className="flex flex-wrap gap-3 items-center">
+      <Button density="xsmall">XSmall</Button>
+      <Button density="small">Small</Button>
+      <Button density="medium">Medium</Button>
+      <Button density="large">Large</Button>
     </div>
   ),
+  parameters: {
+    docs: {
+      description: { story: 'Quatro densidades disponíveis: xsmall (24px), small (32px), medium (40px), large (48px).' },
+    },
+  },
 }
 
-/** Composição com ícone à esquerda. */
-export const WithIcon: Story = {
+export const ComIcones: Story = {
+  name: 'Com ícones',
   render: () => (
-    <Button>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+    <div className="flex flex-wrap gap-3 items-center">
+      <Button
+        startIcon={
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+            className="h-4 w-4">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" />
+          </svg>
+        }
       >
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-        <polyline points="7 10 12 15 17 10" />
-        <line x1="12" x2="12" y1="15" y2="3" />
-      </svg>
-      Download
-    </Button>
+        Download
+      </Button>
+      <Button
+        emphasis="secondary"
+        endIcon={
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+            className="h-4 w-4">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        }
+      >
+        Próximo
+      </Button>
+      <Button
+        emphasis="tertiary"
+        startIcon={
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+            className="h-4 w-4">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+        }
+      >
+        Editar
+      </Button>
+    </div>
   ),
 }
 
-/** Uso com `asChild` para renderizar como link. */
-export const AsLink: Story = {
+export const BotaoCircular: Story = {
+  name: 'Botão circular (CircleButton)',
   render: () => (
-    <Button asChild variant="link">
-      <a href="https://example.com" target="_blank" rel="noopener noreferrer">
-        Visitar site
-      </a>
-    </Button>
+    <div className="flex flex-wrap gap-3 items-center">
+      <CircleButton density="xsmall" aria-label="Adicionar (xsmall)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          className="h-3 w-3">
+          <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </CircleButton>
+      <CircleButton density="small" aria-label="Adicionar (small)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          className="h-4 w-4">
+          <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </CircleButton>
+      <CircleButton density="medium" aria-label="Adicionar (medium)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          className="h-4 w-4">
+          <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </CircleButton>
+      <CircleButton density="large" emphasis="secondary" aria-label="Fechar (large)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          className="h-5 w-5">
+          <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </CircleButton>
+    </div>
   ),
+  parameters: {
+    docs: {
+      description: { story: '`CircleButton` — ícone circular com `aria-label` obrigatório.' },
+    },
+  },
+}
+
+export const BlocoTotal: Story = {
+  name: 'Bloco (largura total)',
+  render: () => (
+    <div className="w-80 flex flex-col gap-3">
+      <Button block>Ação principal — bloco</Button>
+      <Button block emphasis="secondary">Ação secundária — bloco</Button>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: { story: '`block` faz o botão ocupar toda a largura disponível.' },
+    },
+  },
+}
+
+export const EstadoLoading: Story = {
+  name: 'Estado loading',
+  render: () => {
+    const [loading, setLoading] = useState(false)
+    return (
+      <div className="flex gap-3 items-center">
+        <Button
+          loading={loading}
+          onClick={() => {
+            setLoading(true)
+            setTimeout(() => setLoading(false), 2000)
+          }}
+        >
+          {loading ? 'Salvando...' : 'Salvar'}
+        </Button>
+        <Button emphasis="secondary" loading={loading}>Secundário</Button>
+      </div>
+    )
+  },
+  parameters: {
+    docs: {
+      description: { story: 'Clique para simular o carregamento (2 segundos).' },
+    },
+  },
+}
+
+export const Desabilitado: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-3 items-center">
+      <Button disabled>Primário</Button>
+      <Button emphasis="secondary" disabled>Secundário</Button>
+      <Button emphasis="tertiary" disabled>Terciário</Button>
+    </div>
+  ),
+}
+
+export const Posicionamento: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4 w-full max-w-md">
+      {/* Alinhado à direita — padrão modais/formulários GovBR */}
+      <div className="flex justify-end gap-3 border-t border-gray-200 pt-4">
+        <Button emphasis="tertiary">Cancelar</Button>
+        <Button emphasis="secondary">Salvar rascunho</Button>
+        <Button emphasis="primary">Enviar</Button>
+      </div>
+      {/* Centralizado */}
+      <div className="flex justify-center gap-3">
+        <Button emphasis="secondary">Voltar</Button>
+        <Button emphasis="primary">Continuar</Button>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: { story: 'Padrões de posicionamento GovBR: primário à direita, terciário à esquerda.' },
+    },
+  },
 }

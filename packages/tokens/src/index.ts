@@ -1,46 +1,46 @@
-/**
- * @ds/tokens — Design System Tokens
- *
- * Exporta todos os design tokens para uso em componentes e configurações.
- */
-
+// Primitives — Colors
 export {
-  colors,
+  primitiveColors,
+  blueWarmVivid,
+  blueWarm,
+  greenCoolVivid,
+  yellowVivid,
+  redVivid,
   gray,
-  blue,
-  green,
-  red,
-  amber,
-  violet,
-  semanticLight,
-  semanticDark,
-  type SemanticColors,
-} from './colors'
+  pure,
+} from './primitives/colors'
 
+// Primitives — Typography
 export {
-  typography,
-  fontFamily,
-  fontSize,
-  lineHeight,
-  fontWeight,
-  letterSpacing,
-  textStyles,
-} from './typography'
+  fontFamilies,
+  fontWeights,
+  fontSizes,
+  fontSizesPx,
+  lineHeights,
+  letterSpacings,
+} from './primitives/typography'
 
-export {
-  layout,
-  spacing,
-  borderRadius,
-  borderWidth,
-  breakpoints,
-  zIndex,
-  container,
-} from './spacing'
+// Primitives — Spacing
+export { spacing, spacingLayout, spacingAdjust, type SpacingToken } from './primitives/spacing'
 
+// Primitives — Borders
+export { borderRadii, borderWidths } from './primitives/borders'
+
+// Primitives — Shadows
+export { shadows } from './primitives/shadows'
+
+// Primitives — Transitions
 export {
-  effects,
-  shadows,
-  opacity,
-  duration,
-  easing,
-} from './shadows'
+  transitionDuration,
+  transitionEasing,
+  transitions,
+  muiTransitionDuration,
+  muiTransitionEasing,
+  type TransitionDurationKey,
+  type TransitionEasingKey,
+} from './primitives/transitions'
+
+// Semantic
+export { govEspecificacao } from './semantic/gov-spec'
+export { semanticColors } from './semantic/colors'
+export { semanticTypography } from './semantic/typography'

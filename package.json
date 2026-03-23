@@ -10,7 +10,11 @@
     "test": "npm run test --workspaces --if-present",
     "storybook": "npm run storybook -w @ds/storybook",
     "build-storybook": "npm run build-storybook -w @ds/storybook",
-    "clean": "npm run clean --workspaces --if-present"
+    "clean": "npm run clean --workspaces --if-present",
+    "verdaccio:up": "docker compose -f infra/verdaccio/docker-compose.yml up -d",
+    "verdaccio:down": "docker compose -f infra/verdaccio/docker-compose.yml down",
+    "verdaccio:add-user": "./scripts/add-user.sh",
+    "publish:local": "./scripts/publish-local.sh"
   },
   "devDependencies": {
     "typescript": "^5.7.0"
