@@ -2,20 +2,20 @@
   "name": "@ds/components",
   "version": "0.1.0",
   "description": "Design System — React Component Library",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./styles.css": "./dist/styles.css",
     "./tailwind.config": {
       "types": "./dist/tailwind.config.d.ts",
-      "import": "./dist/tailwind.config.js",
-      "require": "./dist/tailwind.config.cjs"
+      "import": "./dist/tailwind.config.mjs",
+      "require": "./dist/tailwind.config.js"
     }
   },
   "files": ["dist"],

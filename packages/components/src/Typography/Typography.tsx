@@ -24,7 +24,7 @@ import { cn } from '../utils/cn'
 
 // ─────────────────────────────────────────────
 // Typography Variants — Class Variance Authority
-// Usa a escala GovBR: gov-xs … gov-5xl
+// Usa a escala GovBR dos tokens: text-down-* | text-base | text-up-*
 // ─────────────────────────────────────────────
 
 const typographyVariants = cva('', {
@@ -32,57 +32,57 @@ const typographyVariants = cva('', {
     // ── Estilo tipográfico GovBR ──────────────
     variant: {
       // Display (hero, landing) — up-07 / light / low
-      'display':     'text-gov-5xl leading-[1.15] font-light tracking-[-0.025em]',
+      'display':     'font-heading text-up-07 leading-[1.15] font-light tracking-[-0.025em]',
 
       // Headings — escala Minor Third GovBR
-      'h1':          'text-gov-4xl leading-[1.15] font-light tracking-[-0.025em]',
-      'h2':          'text-gov-3xl leading-[1.15] font-normal tracking-[-0.025em]',
-      'h3':          'text-gov-2xl leading-[1.15] font-medium',
-      'h4':          'text-gov-xl  leading-[1.15] font-semibold',
-      'h5':          'text-gov-lg  leading-[1.15] font-bold',
-      'h6':          'text-gov-base leading-[1.15] font-extrabold uppercase tracking-[0.08em]',
+      'h1':          'font-heading text-up-06 leading-[1.15] font-light tracking-[-0.025em]',
+      'h2':          'font-heading text-up-05 leading-[1.15] font-normal tracking-[-0.025em]',
+      'h3':          'font-heading text-up-04 leading-[1.15] font-medium',
+      'h4':          'font-heading text-up-03  leading-[1.15] font-semibold',
+      'h5':          'font-heading text-up-02  leading-[1.15] font-bold',
+      'h6':          'font-heading text-up-01 leading-[1.15] font-extrabold uppercase tracking-[0.08em]',
 
       // Body — base: up-01 (1.05rem)
-      'body1':       'text-gov-base leading-[1.45] font-normal',
-      'body2':       'text-gov-sm   leading-[1.45] font-normal',
+      'body1':       'font-body text-up-01 leading-[1.45] font-normal',
+      'body2':       'font-body text-base   leading-[1.45] font-normal',
 
       // Label — base (14px) / semi-bold
-      'label':       'text-gov-sm leading-[1.45] font-semibold',
+      'label':       'font-body text-base leading-[1.45] font-semibold',
 
       // Input — up-01 / medium / low
-      'input':       'text-gov-base leading-[1.15] font-medium',
+      'input':       'font-body text-up-01 leading-[1.15] font-medium',
 
       // Caption — down-01 (11.67px)
-      'caption':     'text-gov-xs leading-[1.45] font-normal',
+      'caption':     'font-body text-down-01 leading-[1.45] font-normal',
 
       // Overline — base / semi-bold / uppercase
-      'overline':    'text-gov-sm leading-[1.45] font-semibold uppercase tracking-[0.08em]',
+      'overline':    'font-body text-base leading-[1.45] font-semibold uppercase tracking-[0.08em]',
 
       // Button — up-01 / semi-bold
-      'button':      'text-gov-base leading-[1.15] font-semibold',
+      'button':      'font-body text-up-01 leading-[1.15] font-semibold',
 
       // Code — mono / base / medium / low
-      'code':        'font-mono text-gov-sm leading-[1.15] font-medium',
+      'code':        'font-mono text-base leading-[1.15] font-medium',
 
       // Aliases compostos para display e headings (mantém compatibilidade)
-      'display-2xl': 'text-gov-5xl leading-[1.15] font-bold tracking-[-0.025em]',
-      'display-xl':  'text-gov-4xl leading-[1.15] font-bold tracking-[-0.025em]',
-      'display-lg':  'text-gov-3xl leading-[1.15] font-bold',
-      'heading-xl':  'text-gov-4xl leading-[1.15] font-light',
-      'heading-lg':  'text-gov-3xl leading-[1.15] font-normal',
-      'heading-md':  'text-gov-2xl leading-[1.15] font-medium',
-      'heading-sm':  'text-gov-xl  leading-[1.15] font-semibold',
-      'heading-xs':  'text-gov-lg  leading-[1.15] font-bold uppercase tracking-[0.08em]',
-      'body-lg':     'text-gov-base leading-[1.45] font-normal',
-      'body-md':     'text-gov-base leading-[1.45] font-normal',
-      'body-sm':     'text-gov-sm   leading-[1.45] font-normal',
-      'body-xs':     'text-gov-xs   leading-[1.45] font-normal',
-      'label-lg':    'text-gov-base leading-[1.45] font-medium',
-      'label-md':    'text-gov-sm   leading-[1.45] font-medium',
-      'label-sm':    'text-gov-xs   leading-[1.45] font-medium tracking-[0.025em]',
-      'code-lg':     'font-mono text-gov-base leading-[1.45] font-normal',
-      'code-md':     'font-mono text-gov-sm   leading-[1.45] font-normal',
-      'code-sm':     'font-mono text-gov-xs   leading-[1.45] font-normal',
+      'display-2xl': 'font-heading text-up-07 leading-[1.15] font-bold tracking-[-0.025em]',
+      'display-xl':  'font-heading text-up-06 leading-[1.15] font-bold tracking-[-0.025em]',
+      'display-lg':  'font-heading text-up-05 leading-[1.15] font-bold',
+      'heading-xl':  'font-heading text-up-06 leading-[1.15] font-light',
+      'heading-lg':  'font-heading text-up-05 leading-[1.15] font-normal',
+      'heading-md':  'font-heading text-up-04 leading-[1.15] font-medium',
+      'heading-sm':  'font-heading text-up-03  leading-[1.15] font-semibold',
+      'heading-xs':  'font-heading text-up-02  leading-[1.15] font-bold uppercase tracking-[0.08em]',
+      'body-lg':     'font-body text-up-01 leading-[1.45] font-normal',
+      'body-md':     'font-body text-up-01 leading-[1.45] font-normal',
+      'body-sm':     'font-body text-base   leading-[1.45] font-normal',
+      'body-xs':     'font-body text-down-01   leading-[1.45] font-normal',
+      'label-lg':    'font-body text-up-01 leading-[1.45] font-medium',
+      'label-md':    'font-body text-base   leading-[1.45] font-medium',
+      'label-sm':    'font-body text-down-01   leading-[1.45] font-medium tracking-[0.025em]',
+      'code-lg':     'font-mono text-up-01 leading-[1.45] font-normal',
+      'code-md':     'font-mono text-base   leading-[1.45] font-normal',
+      'code-sm':     'font-mono text-down-01   leading-[1.45] font-normal',
     },
 
     // ── Cor semântica ──────────────────────────
@@ -135,52 +135,52 @@ const typographyVariants = cva('', {
     {
       variant: 'h1',
       responsive: true,
-      className: 'text-gov-3xl sm:text-gov-4xl leading-[1.15] font-light tracking-[-0.025em]',
+      className: 'font-heading text-up-05 sm:text-up-06 leading-[1.15] font-light tracking-[-0.025em]',
     },
     {
       variant: 'h2',
       responsive: true,
-      className: 'text-gov-2xl sm:text-gov-3xl leading-[1.15] font-normal tracking-[-0.025em]',
+      className: 'font-heading text-up-04 sm:text-up-05 leading-[1.15] font-normal tracking-[-0.025em]',
     },
     {
       variant: 'h3',
       responsive: true,
-      className: 'text-gov-xl sm:text-gov-2xl leading-[1.15] font-medium',
+      className: 'font-heading text-up-03 sm:text-up-04 leading-[1.15] font-medium',
     },
     {
       variant: 'h4',
       responsive: true,
-      className: 'text-gov-lg sm:text-gov-xl leading-[1.15] font-semibold',
+      className: 'font-heading text-up-02 sm:text-up-03 leading-[1.15] font-semibold',
     },
     {
       variant: 'display-2xl',
       responsive: true,
-      className: 'text-gov-3xl sm:text-gov-4xl lg:text-gov-5xl leading-[1.15] font-bold tracking-[-0.025em]',
+      className: 'font-heading text-up-05 sm:text-up-06 lg:text-up-07 leading-[1.15] font-bold tracking-[-0.025em]',
     },
     {
       variant: 'display-xl',
       responsive: true,
-      className: 'text-gov-2xl sm:text-gov-3xl lg:text-gov-4xl leading-[1.15] font-bold tracking-[-0.025em]',
+      className: 'font-heading text-up-04 sm:text-up-05 lg:text-up-06 leading-[1.15] font-bold tracking-[-0.025em]',
     },
     {
       variant: 'heading-xl',
       responsive: true,
-      className: 'text-gov-2xl sm:text-gov-3xl leading-[1.15] font-light',
+      className: 'font-heading text-up-04 sm:text-up-05 leading-[1.15] font-light',
     },
     {
       variant: 'heading-lg',
       responsive: true,
-      className: 'text-gov-xl sm:text-gov-2xl leading-[1.15] font-normal',
+      className: 'font-heading text-up-03 sm:text-up-04 leading-[1.15] font-normal',
     },
     {
       variant: 'heading-md',
       responsive: true,
-      className: 'text-gov-lg sm:text-gov-xl leading-[1.15] font-medium',
+      className: 'font-heading text-up-02 sm:text-up-03 leading-[1.15] font-medium',
     },
     {
       variant: 'heading-sm',
       responsive: true,
-      className: 'text-gov-base sm:text-gov-lg leading-[1.15] font-semibold',
+      className: 'font-heading text-up-01 sm:text-up-02 leading-[1.15] font-semibold',
     },
   ],
 

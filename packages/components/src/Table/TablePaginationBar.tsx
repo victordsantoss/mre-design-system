@@ -101,7 +101,7 @@ export function TablePaginationBar({
       role="navigation"
       aria-label="Paginação da tabela"
       className={cn(
-        'flex min-h-12 flex-nowrap items-center gap-0 text-base',
+        'flex min-h-12 flex-nowrap items-center gap-0 font-body text-base',
         className,
       )}
       style={{

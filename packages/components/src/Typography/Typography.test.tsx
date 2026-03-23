@@ -1,17 +1,18 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Typography } from './Typography'
+import { Typography, typographyVariants } from './Typography'
 
 // ─────────────────────────────────────────────
 // Renderização padrão
 // ─────────────────────────────────────────────
 
 describe('Typography — renderização padrão', () => {
-  it('renderiza com variant body-md como <p> por padrão', () => {
+  it('renderiza com variant body2 como <p> por padrão', () => {
     render(<Typography>Texto padrão</Typography>)
     const el = screen.getByText('Texto padrão')
     expect(el.tagName).toBe('P')
-    expect(el).toHaveClass('text-base', 'leading-normal')
+    /* tailwind-merge remove utilitários `text-*` de tamanho quando `text-foreground` (mesmo grupo text-) */
+    expect(el).toHaveClass('font-body', 'leading-[1.45]', 'font-normal', 'text-foreground')
   })
 
   it('renderiza os filhos corretamente', () => {
@@ -75,29 +76,54 @@ describe('Typography — elemento semântico padrão', () => {
 })
 
 // ─────────────────────────────────────────────
+// CVA: escala dos tokens (string antes de `cn` / tailwind-merge)
+// ─────────────────────────────────────────────
+
+describe('Typography — CVA inclui escala GovBR', () => {
+  const base = {
+    color: 'default' as const,
+    italic: false as const,
+    underline: false as const,
+    truncate: false as const,
+    responsive: false as const,
+  }
+
+  it.each([
+    ['body2', 'text-base'],
+    ['body-lg', 'text-up-01'],
+    ['display-2xl', 'text-up-07'],
+    ['heading-md', 'text-up-04'],
+    ['code-sm', 'text-down-01'],
+    ['code-lg', 'font-mono'],
+  ] as const)('variant %s inclui %s na definição CVA', (variant, needle) => {
+    expect(typographyVariants({ ...base, variant })).toContain(needle)
+  })
+})
+
+// ─────────────────────────────────────────────
 // Classes tipográficas por variante
 // ─────────────────────────────────────────────
 
 describe('Typography — classes por variante', () => {
   it.each([
-    ['display-2xl', ['text-6xl', 'leading-none', 'font-bold', 'tracking-tighter']],
-    ['display-xl',  ['text-5xl', 'leading-none', 'font-bold', 'tracking-tighter']],
-    ['display-lg',  ['text-4xl', 'leading-tight', 'font-bold', 'tracking-tight']],
-    ['heading-xl',  ['text-3xl', 'leading-tight', 'font-semibold', 'tracking-tight']],
-    ['heading-lg',  ['text-2xl', 'leading-snug', 'font-semibold']],
-    ['heading-md',  ['text-xl', 'leading-snug', 'font-semibold']],
-    ['heading-sm',  ['text-lg', 'leading-normal', 'font-semibold']],
-    ['heading-xs',  ['text-base', 'leading-normal', 'font-semibold']],
-    ['body-lg',     ['text-lg', 'leading-relaxed']],
-    ['body-md',     ['text-base', 'leading-normal']],
-    ['body-sm',     ['text-sm', 'leading-normal']],
-    ['body-xs',     ['text-xs', 'leading-normal']],
-    ['label-lg',    ['text-base', 'font-medium']],
-    ['label-md',    ['text-sm', 'font-medium']],
-    ['label-sm',    ['text-xs', 'font-medium', 'tracking-wide']],
-    ['code-lg',     ['font-mono', 'text-base']],
-    ['code-md',     ['font-mono', 'text-sm']],
-    ['code-sm',     ['font-mono', 'text-xs']],
+    ['display-2xl', ['font-heading', 'leading-[1.15]', 'font-bold', 'tracking-[-0.025em]', 'text-foreground']],
+    ['display-xl',  ['font-heading', 'leading-[1.15]', 'font-bold', 'tracking-[-0.025em]', 'text-foreground']],
+    ['display-lg',  ['font-heading', 'leading-[1.15]', 'font-bold', 'text-foreground']],
+    ['heading-xl',  ['font-heading', 'leading-[1.15]', 'font-light', 'text-foreground']],
+    ['heading-lg',  ['font-heading', 'leading-[1.15]', 'font-normal', 'text-foreground']],
+    ['heading-md',  ['font-heading', 'leading-[1.15]', 'font-medium', 'text-foreground']],
+    ['heading-sm',  ['font-heading', 'leading-[1.15]', 'font-semibold', 'text-foreground']],
+    ['heading-xs',  ['font-heading', 'leading-[1.15]', 'font-bold', 'uppercase', 'tracking-[0.08em]', 'text-foreground']],
+    ['body-lg',     ['font-body', 'leading-[1.45]', 'font-normal', 'text-foreground']],
+    ['body-md',     ['font-body', 'leading-[1.45]', 'font-normal', 'text-foreground']],
+    ['body-sm',     ['font-body', 'leading-[1.45]', 'font-normal', 'text-foreground']],
+    ['body-xs',     ['font-body', 'leading-[1.45]', 'font-normal', 'text-foreground']],
+    ['label-lg',    ['font-body', 'leading-[1.45]', 'font-medium', 'text-foreground']],
+    ['label-md',    ['font-body', 'leading-[1.45]', 'font-medium', 'text-foreground']],
+    ['label-sm',    ['font-body', 'leading-[1.45]', 'font-medium', 'tracking-[0.025em]', 'text-foreground']],
+    ['code-lg',     ['font-mono', 'leading-[1.45]', 'font-normal', 'text-foreground']],
+    ['code-md',     ['font-mono', 'leading-[1.45]', 'font-normal', 'text-foreground']],
+    ['code-sm',     ['font-mono', 'leading-[1.45]', 'font-normal', 'text-foreground']],
   ] as const)('variant %s aplica as classes corretas', (variant, classes) => {
     render(<Typography variant={variant}>x</Typography>)
     const el = screen.getByText('x')
@@ -131,7 +157,7 @@ describe('Typography — prop `as`', () => {
     render(<Typography variant="heading-md" as="p">título</Typography>)
     const el = screen.getByText('título')
     expect(el.tagName).toBe('P')
-    expect(el).toHaveClass('text-xl', 'font-semibold')
+    expect(el).toHaveClass('font-heading', 'font-medium', 'leading-[1.15]', 'text-foreground')
   })
 })
 
@@ -237,20 +263,20 @@ describe('Typography — prop `responsive`', () => {
   it('aplica classes responsivas para display-2xl', () => {
     render(<Typography variant="display-2xl" responsive>título</Typography>)
     const el = screen.getByText('título')
-    expect(el).toHaveClass('sm:text-5xl')
-    expect(el).toHaveClass('lg:text-6xl')
+    expect(el).toHaveClass('sm:text-up-06')
+    expect(el).toHaveClass('lg:text-up-07')
   })
 
   it('aplica classes responsivas para heading-lg', () => {
     render(<Typography variant="heading-lg" responsive>título</Typography>)
     const el = screen.getByText('título')
-    expect(el).toHaveClass('sm:text-2xl')
+    expect(el).toHaveClass('sm:text-up-04')
   })
 
   it('não aplica classes responsivas quando responsive={false}', () => {
     render(<Typography variant="display-2xl" responsive={false}>título</Typography>)
     const el = screen.getByText('título')
-    expect(el).not.toHaveClass('sm:text-5xl')
+    expect(el).not.toHaveClass('sm:text-up-06')
   })
 })
 

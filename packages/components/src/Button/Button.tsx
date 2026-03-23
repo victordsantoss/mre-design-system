@@ -11,7 +11,7 @@ import { cn } from '../utils/cn'
 
 const buttonVariants = cva(
   [
-    'inline-flex items-center justify-center whitespace-nowrap rounded-pill',
+    'inline-flex items-center justify-center whitespace-nowrap rounded-pill font-body',
     'px-[var(--spacing-scale-3x)] gap-[var(--spacing-scale-base)]',
     'text-[var(--font-size-scale-up-01)] font-[var(--font-weight-semi-bold)] leading-[var(--font-lineheight-low)]',
     'normal-case tracking-normal',
@@ -157,7 +157,7 @@ Button.displayName = 'Button'
 
 const circleButtonVariants = cva(
   [
-    'inline-flex items-center justify-center rounded-full',
+    'inline-flex items-center justify-center rounded-full font-body',
     '[&_svg]:h-[var(--icon-size-base)] [&_svg]:w-[var(--icon-size-base)] [&_svg]:shrink-0',
     'transition-colors duration-gov-fast',
     'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',

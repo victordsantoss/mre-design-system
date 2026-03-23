@@ -1,11 +1,15 @@
 import type { Config } from 'tailwindcss'
+import dsPreset from '@ds/components/tailwind.config'
 
+/**
+ * Storybook — estende o preset GovBR de `@ds/components` (tipografia `down-*` / `base` / `up-*`, etc.).
+ */
 const config: Config = {
+  presets: [dsPreset],
   content: [
     './stories/**/*.{ts,tsx,mdx}',
     '../components/src/**/*.{ts,tsx}',
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -59,19 +63,6 @@ const config: Config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
         pill: 'var(--surface-rounder-pill, 100em)',
-      },
-      transitionDuration: {
-        'gov-fast': '100ms',
-        'gov-base': '300ms',
-      },
-      fontSize: {
-        'gov-xs': ['0.729rem', { lineHeight: '1.45' }],
-        'gov-sm': ['0.875rem', { lineHeight: '1.45' }],
-        'gov-base': ['1.05rem', { lineHeight: '1.45' }],
-        'gov-lg': ['1.26rem', { lineHeight: '1.15' }],
-        'gov-xl': ['1.512rem', { lineHeight: '1.15' }],
-        'gov-2xl': ['1.814rem', { lineHeight: '1.15' }],
-        'gov-3xl': ['2.178rem', { lineHeight: '1.15' }],
       },
       boxShadow: {
         'card-md': '0 2px 8px 0 rgba(7,29,65,0.12)',

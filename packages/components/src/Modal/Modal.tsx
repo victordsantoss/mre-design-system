@@ -134,7 +134,7 @@ const Modal = React.forwardRef<HTMLDialogElement, ModalProps>(
           // Scrim GovBR: backdrop azul navy semitransparente
           'backdrop:bg-[var(--color-overlay)]',
           // Painel
-          'relative m-auto w-full overflow-hidden bg-background text-foreground',
+          'relative m-auto w-full overflow-hidden bg-background font-body text-foreground',
           'shadow-modal',
           widthClass,
           // Reset dialog padrão
@@ -157,7 +157,7 @@ const Modal = React.forwardRef<HTMLDialogElement, ModalProps>(
                 typeof title === 'string' ? (
                   <h2
                     id={titleId}
-                    className="text-gov-xl font-semibold leading-tight text-foreground"
+                    className="font-heading text-up-03 font-semibold leading-tight text-foreground"
                   >
                     {title}
                   </h2>
@@ -187,7 +187,7 @@ const Modal = React.forwardRef<HTMLDialogElement, ModalProps>(
         {/* ── Conteúdo ── */}
         <div
           className={cn(
-            'px-6 py-6 text-gov-base leading-normal text-foreground',
+            'px-6 py-6 font-body text-up-01 leading-normal text-foreground',
             hasHeader ? 'pt-4' : 'pt-6',
           )}
         >
@@ -199,7 +199,7 @@ const Modal = React.forwardRef<HTMLDialogElement, ModalProps>(
           <div
             className={cn(
               'flex flex-wrap items-center justify-end gap-3 border-t border-border',
-              'bg-background px-6 py-4',
+              'bg-background px-6 py-4 font-body',
             )}
           >
             {actions}

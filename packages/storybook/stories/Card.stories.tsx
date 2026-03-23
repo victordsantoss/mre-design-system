@@ -13,7 +13,95 @@ import {
   Input,
 } from '@ds/components'
 
-const DOCS = ``.trim()
+const CARD_DOCS = [
+  '## Card (Cartão)',
+  '',
+  'O **Card** agrupa conteúdo e ações sobre **um único assunto** numa **superfície** destacada do fundo da página — conforme o Padrão Digital de Governo (GovBR) e as diretrizes do **Ministério das Relações Exteriores (MRE / Itamaraty)**. É um componente **composto** (`Card` + áreas opcionais).',
+  '',
+  '### Visão geral',
+  '',
+  'A superfície usa fundo claro (`--pure-0` / tema), **borda** e **sombra** para separação visual; o conteúdo mínimo é **pelo menos uma área com texto ou componentes**. Ordene blocos de forma lógica: título → conteúdo → ações.',
+  '',
+  '| API | Função GovBR |',
+  '|-----|----------------|',
+  '| `Card` | Superfície raiz (semântica, sombra, estados) |',
+  '| `CardHeader` | Área de títulos (título, subtítulo, ícone) |',
+  '| `CardTitle` / `CardDescription` | Tipografia hierárquica |',
+  '| `CardHeaderIcon` | Ícone na área de título (padding token) |',
+  '| `CardContent` | Corpo principal (formulários, texto, listas) |',
+  '| `CardFooter` / ações | Botões ou links de ação |',
+  '| `CardMedia` | Mídia em sangria (largura total da superfície) |',
+  '',
+  '### Códigos',
+  '',
+  '```tsx',
+  "import {",
+  '  Card,',
+  '  CardHeader,',
+  '  CardTitle,',
+  '  CardDescription,',
+  '  CardContent,',
+  '  CardFooter,',
+  '  Button,',
+  "} from '@ds/components'",
+  "import '@ds/components/styles.css'",
+  '',
+  '<Card>',
+  '  <CardHeader>',
+  '    <CardTitle>Título</CardTitle>',
+  '    <CardDescription>Subtítulo opcional.</CardDescription>',
+  '  </CardHeader>',
+  '  <CardContent>',
+  '    <p>Conteúdo obrigatório mínimo.</p>',
+  '  </CardContent>',
+  '  <CardFooter className="justify-end gap-2">',
+  '    <Button emphasis="tertiary" type="button">Cancelar</Button>',
+  '    <Button emphasis="primary" type="button">Confirmar</Button>',
+  '  </CardFooter>',
+  '</Card>',
+  '```',
+  '',
+  '### Acessibilidade',
+  '',
+  '- **Interativo (`hover`):** o root recebe `tabIndex={0}` e foco visível GovBR; use apenas quando o cartão for clicável.',
+  '- **Desativado:** `disabled` → `aria-disabled` e estilo de superfície desativada.',
+  '- **Mídia:** `CardMedia` deve ter texto alternativo quando for informativa (`aria-label` / `role="img"` conforme o caso).',
+  '- Prefira **não** colocar rolagem interna no card; use altura flexível ou `fixedHeight` com overflow oculto quando necessário.',
+  '',
+  '### Uso',
+  '',
+  '- **Simples:** só `CardContent` para destaques curtos.',
+  '- **Completo:** cabeçalho + conteúdo + rodapé com ações alinhadas (ex.: direita para confirmação).',
+  '- **Mídia em sangria:** coloque `CardMedia` no topo (ou conforme layout) para imagens que ocupam toda a largura da superfície.',
+  '',
+  '### Anatomia',
+  '',
+  '| ID | Nome | Fundamento | Obrigatório |',
+  '|----|------|------------|-------------|',
+  '| 1 | Superfície do Card | Superfície + sombra + borda | Sim |',
+  '| 2 | Área de títulos | Tipografia | Não |',
+  '| 3 | Ícone no cabeçalho | Iconografia | Não (`CardHeaderIcon`) |',
+  '| 4 | Conteúdo | Conteúdo / formulários | Sim (mínimo um bloco) |',
+  '| 5 | Ações | Button / links | Não (`CardFooter`) |',
+  '| 6 | Mídia | Imagem / ilustração | Não (`CardMedia`) |',
+  '',
+  '### Comportamentos',
+  '',
+  '- **`hover`:** elevação e overlay de interação (tokens de sombra e overlay).',
+  '- **`disabled` / `dragged`:** feedback visual para estados de UI específicos.',
+  '- **`fixedHeight` + `contentHeight`:** altura fixa da zona de conteúdo (ex.: grelhas alinhadas); texto extra pode ser cortado — evite scroll dentro do card quando possível.',
+  '- **Responsividade:** largura costuma ser definida pelo contentor (`className` / grid); o texto quebra dentro das áreas.',
+  '',
+  '### Melhores práticas',
+  '',
+  '- **Um assunto por card**; evite aninhar cartões ou empilhar muitos cartões sem respiro.',
+  '- Mantenha **espaço entre cartões** (escala de layout GovBR).',
+  '- Hierarquia: **título no topo**, ações **em baixo**.',
+  '',
+  '### Especificações (tokens)',
+  '',
+  'Superfície: `--pure-0`, `--color-border`, `--shadow-card`, hover `--shadow-popover`. Padding geral: `--card-padding`; ícone no cabeçalho: `--card-icon-padding`. Verso (ex.: flip): `--color-card-back` / `--gray-2`. Estados: `--status-disabled-background`, `--status-dragged-background`. Cores de overlay: `--color-card-hover-overlay`, `--color-card-active-overlay`. Valores numéricos espelham `@ds/tokens` (`elevation`, `spacing`, paletas GovBR).',
+].join('\n')
 
 const meta: Meta<typeof Card> = {
   title: 'Components/Card',
@@ -23,7 +111,10 @@ const meta: Meta<typeof Card> = {
     layout: 'centered',
     /** Fundo neutro para a superfície branca + sombra do card lerem bem (evita branco sobre branco). */
     backgrounds: { default: 'gray' },
-    docs: { description: { component: DOCS } },
+    docs: {
+      subtitle: 'Cartão — GovBR / MRE',
+      description: { component: CARD_DOCS },
+    },
   },
   argTypes: {
     hover: {
@@ -71,7 +162,7 @@ export const Playground: Story = {
         <CardDescription>Exemplo no Playground.</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-gov-sm text-muted-foreground">Conteúdo.</p>
+        <p className="text-base text-muted-foreground">Conteúdo.</p>
       </CardContent>
     </Card>
   ),
@@ -83,8 +174,8 @@ export const SimplesEComplexo: Story = {
     <div className="flex flex-wrap gap-6 justify-center items-start">
       <Card className="w-[280px]">
         <CardContent>
-          <p className="text-gov-base font-medium">Card simples</p>
-          <p className="text-gov-sm text-muted-foreground mt-1">Apenas a área de conteúdo.</p>
+          <p className="text-up-01 font-medium">Card simples</p>
+          <p className="text-base text-muted-foreground mt-1">Apenas a área de conteúdo.</p>
         </CardContent>
       </Card>
       <Card className="w-[380px]">
@@ -124,12 +215,12 @@ export const AnatomiaComIcone: Story = {
           </svg>
         </CardHeaderIcon>
         <div className="min-w-0 flex-1">
-          <CardTitle className="text-gov-lg">Documento</CardTitle>
+          <CardTitle className="text-up-02">Documento</CardTitle>
           <CardDescription>Ícone com padding 8px (token); título e descrição ao lado.</CardDescription>
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-gov-sm text-muted-foreground">Área de conteúdo.</p>
+        <p className="text-base text-muted-foreground">Área de conteúdo.</p>
       </CardContent>
     </Card>
   ),
@@ -154,7 +245,7 @@ export const MidiaSangrando: Story = {
         role="img"
       />
       <CardHeader>
-        <CardTitle className="text-gov-lg">Com imagem</CardTitle>
+        <CardTitle className="text-up-02">Com imagem</CardTitle>
         <CardDescription>Mídia pode ocupar a largura total da superfície (exceção às margens internas).</CardDescription>
       </CardHeader>
       <CardFooter>
@@ -178,12 +269,12 @@ export const AlturaFlexivelEFixa: Story = {
         <p className="mb-2 text-xs font-medium text-muted-foreground">Flexível — altura pelo conteúdo</p>
         <Card className="w-[260px]">
           <CardContent>
-            <p className="text-gov-sm">Pouco texto.</p>
+            <p className="text-base">Pouco texto.</p>
           </CardContent>
         </Card>
         <Card className="w-[260px] mt-3">
           <CardContent>
-            <p className="text-gov-sm">
+            <p className="text-base">
               Mais conteúdo aumenta a altura do card sem rolagem interna, alinhado ao princípio de simplicidade.
             </p>
           </CardContent>
@@ -193,7 +284,7 @@ export const AlturaFlexivelEFixa: Story = {
         <p className="mb-2 text-xs font-medium text-muted-foreground">Fixa — mesma altura de conteúdo (overflow oculto)</p>
         <Card className="w-[260px]" fixedHeight contentHeight={100}>
           <CardContent>
-            <p className="text-gov-sm">
+            <p className="text-base">
               Texto longo que pode ser cortado quando a área de conteúdo tem altura fixa menor que o necessário.
               Use para alinhar vários cards em grade.
             </p>
@@ -218,10 +309,10 @@ export const AreaDeRespiro: Story = {
   render: () => (
     <div className="flex flex-wrap gap-6 p-4 rounded-lg border border-dashed border-border">
       <Card className="w-[200px]">
-        <CardContent><p className="text-gov-sm font-medium">Card A</p></CardContent>
+        <CardContent><p className="text-base font-medium">Card A</p></CardContent>
       </Card>
       <Card className="w-[200px]">
-        <CardContent><p className="text-gov-sm font-medium">Card B</p></CardContent>
+        <CardContent><p className="text-base font-medium">Card B</p></CardContent>
       </Card>
     </div>
   ),
@@ -241,20 +332,20 @@ export const Estados: Story = {
     <div className="flex flex-wrap gap-4 items-stretch justify-center">
       <Card hover className="w-[200px] cursor-pointer">
         <CardContent>
-          <p className="text-gov-sm font-medium">Hover / interativo</p>
-          <p className="text-gov-xs text-muted-foreground mt-1">Passe o foco ou clique.</p>
+          <p className="text-base font-medium">Hover / interativo</p>
+          <p className="text-down-01 text-muted-foreground mt-1">Passe o foco ou clique.</p>
         </CardContent>
       </Card>
       <Card disabled className="w-[200px]">
         <CardContent>
-          <p className="text-gov-sm font-medium">Desabilitado</p>
-          <p className="text-gov-xs text-muted-foreground mt-1">`--status-disabled-background`</p>
+          <p className="text-base font-medium">Desabilitado</p>
+          <p className="text-down-01 text-muted-foreground mt-1">`--status-disabled-background`</p>
         </CardContent>
       </Card>
       <Card dragged className="w-[200px]">
         <CardContent>
-          <p className="text-gov-sm font-medium">Arrastando</p>
-          <p className="text-gov-xs text-muted-foreground mt-1">`--status-dragged-background`</p>
+          <p className="text-base font-medium">Arrastando</p>
+          <p className="text-down-01 text-muted-foreground mt-1">`--status-dragged-background`</p>
         </CardContent>
       </Card>
     </div>
@@ -276,15 +367,15 @@ export const ExpandirConteudo: Story = {
     return (
       <Card className="w-[340px]">
         <CardHeader>
-          <CardTitle className="text-gov-lg">Resumo</CardTitle>
+          <CardTitle className="text-up-02">Resumo</CardTitle>
           <CardDescription>Informação principal sempre visível.</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-gov-sm text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             Use botão terciário “Expandir” para detalhes complementares, com moderação (simplicidade).
           </p>
           {open && (
-            <div className="mt-3 rounded-md bg-[var(--color-card-back)] p-3 text-gov-sm text-foreground border border-border">
+            <div className="mt-3 rounded-md bg-[var(--color-card-back)] p-3 text-base text-foreground border border-border">
               Detalhes extras: metadados, histórico ou texto longo que não precisa estar sempre visível.
             </div>
           )}
@@ -318,11 +409,11 @@ export const VersoAlternado: Story = {
             className={`transition-opacity duration-gov-base ${back ? 'hidden' : 'block'}`}
           >
             <CardHeader>
-              <CardTitle className="text-gov-lg">Frente</CardTitle>
+              <CardTitle className="text-up-02">Frente</CardTitle>
               <CardDescription>Informação principal.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-gov-sm">Clique para ver o verso (fundo `--color-card-back` / gray-2).</p>
+              <p className="text-base">Clique para ver o verso (fundo `--color-card-back` / gray-2).</p>
             </CardContent>
             <CardFooter>
               <Button emphasis="tertiary" type="button" onClick={() => setBack(true)}>Ver detalhes</Button>
@@ -332,11 +423,11 @@ export const VersoAlternado: Story = {
             className={`bg-[var(--color-card-back)] ${back ? 'block' : 'hidden'}`}
           >
             <CardHeader>
-              <CardTitle className="text-gov-lg">Verso</CardTitle>
+              <CardTitle className="text-up-02">Verso</CardTitle>
               <CardDescription>Texto complementar.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-gov-sm text-foreground">Menos relevante que a frente; contraste com o fundo ajuda o usuário.</p>
+              <p className="text-base text-foreground">Menos relevante que a frente; contraste com o fundo ajuda o usuário.</p>
             </CardContent>
             <CardFooter>
               <Button emphasis="tertiary" type="button" onClick={() => setBack(false)}>Voltar</Button>
@@ -361,7 +452,7 @@ export const ComportamentoBloco: Story = {
   render: () => (
     <Card className="w-[min(100%,320px)]">
       <CardContent className="pb-2">
-        <p className="text-gov-sm text-muted-foreground">Em formulários, ações com `Button block` ocupam a largura útil (recomendado em toque).</p>
+        <p className="text-base text-muted-foreground">Em formulários, ações com `Button block` ocupam a largura útil (recomendado em toque).</p>
       </CardContent>
       <CardFooter className="flex-col items-stretch gap-2">
         <Button block emphasis="primary" type="button">Confirmar</Button>
@@ -388,10 +479,10 @@ export const Estatisticas: Story = {
         <Card key={row.title} className="w-[200px]">
           <CardHeader className="pb-0">
             <CardDescription>{row.title}</CardDescription>
-            <CardTitle className="text-gov-2xl tabular-nums">{row.value}</CardTitle>
+            <CardTitle className="text-up-04 tabular-nums">{row.value}</CardTitle>
           </CardHeader>
           <CardContent className="pt-2">
-            <p className="text-gov-xs text-success">{row.hint}</p>
+            <p className="text-down-01 text-success">{row.hint}</p>
           </CardContent>
         </Card>
       ))}

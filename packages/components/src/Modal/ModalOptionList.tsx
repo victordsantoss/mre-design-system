@@ -20,7 +20,7 @@ export interface ModalOptionListProps {
 
 export function ModalOptionList({ items, onItemClick }: ModalOptionListProps) {
   return (
-    <ul className="m-0 list-none p-0">
+    <ul className="m-0 list-none p-0 font-body">
       {items.map((item, index) => (
         <li key={item.id} className="block">
           <button
@@ -33,7 +33,7 @@ export function ModalOptionList({ items, onItemClick }: ModalOptionListProps) {
             )}
           >
             <span
-              className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted text-gov-sm font-medium text-muted-foreground"
+              className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted text-base font-medium text-muted-foreground"
               aria-hidden={item.avatarSrc ? undefined : true}
             >
               {item.avatarSrc ? (
@@ -42,7 +42,7 @@ export function ModalOptionList({ items, onItemClick }: ModalOptionListProps) {
                 '?'
               )}
             </span>
-            <span className="text-gov-base font-normal text-muted-foreground">
+            <span className="text-up-01 font-normal text-muted-foreground">
               {item.label}
             </span>
           </button>

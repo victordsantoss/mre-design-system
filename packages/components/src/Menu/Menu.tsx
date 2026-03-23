@@ -132,7 +132,7 @@ function MenuItemInternal({
   )
 
   const itemClass = cn(
-    'flex w-full items-center gap-2 border-l-4 border-transparent text-left transition-colors',
+    'flex w-full items-center gap-2 border-l-4 border-transparent text-left font-body transition-colors',
     py,
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
     active && 'border-primary bg-primary/[0.06] font-semibold text-primary',
@@ -234,7 +234,7 @@ export function Menu({
           <div className="min-w-0 flex-1">
             {headerBar.logo}
             {headerBar.title ? (
-              <p className="text-gov-base font-semibold text-foreground">{headerBar.title}</p>
+              <p className="font-heading text-up-01 font-semibold text-foreground">{headerBar.title}</p>
             ) : null}
           </div>
           {headerBar.showClose ? (
@@ -257,7 +257,7 @@ export function Menu({
         {folders.map((folder, fi) => (
           <div key={folder.id ?? folder.title ?? `folder-${fi}`} className="border-b border-border last:border-b-0">
             {folder.title ? (
-              <p className="px-4 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              <p className="px-4 pb-1 pt-3 font-heading text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 {folder.title}
               </p>
             ) : null}

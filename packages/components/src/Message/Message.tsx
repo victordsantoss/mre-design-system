@@ -224,7 +224,7 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(function Message(
         className={cn(
           'inline-flex max-w-full items-center gap-[var(--spacing-scale-half)] rounded-xs',
           'px-[var(--spacing-scale-half)] py-[var(--spacing-scale-half)]',
-          'text-[length:var(--font-size-scale-base)] font-medium leading-[var(--font-lineheight-medium)]',
+          'font-body text-[length:var(--font-size-scale-base)] font-medium leading-[var(--font-lineheight-medium)]',
           className,
         )}
       >
@@ -274,17 +274,17 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(function Message(
       >
         {title && titleInline ? (
           <div
-            className="flex flex-wrap items-baseline gap-x-1 gap-y-0 text-[length:var(--font-size-scale-up-01)] leading-[var(--font-lineheight-medium)]"
+            className="flex flex-wrap items-baseline gap-x-1 gap-y-0 font-body text-[length:var(--font-size-scale-up-01)] leading-[var(--font-lineheight-medium)]"
             style={{ color: v.messageStandard }}
           >
-            <span className="font-semibold">{title}</span>
+            <span className="font-heading font-semibold">{title}</span>
             <span className="font-normal">{children}</span>
           </div>
         ) : (
           <>
             {title ? (
               <p
-                className="mb-1 text-[length:var(--font-size-scale-up-01)] font-semibold leading-[var(--font-lineheight-low)]"
+                className="mb-1 font-heading text-[length:var(--font-size-scale-up-01)] font-semibold leading-[var(--font-lineheight-low)]"
                 style={{ color: v.title }}
               >
                 {title}

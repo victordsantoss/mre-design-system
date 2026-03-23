@@ -172,20 +172,20 @@ export const MensagemTipoContextual: Story = {
   render: () => (
     <div className="flex max-w-md flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <label className="text-gov-sm font-medium text-foreground" htmlFor="ex-email">
+        <label className="text-base font-medium text-foreground" htmlFor="ex-email">
           E-mail
         </label>
         <input
           id="ex-email"
           type="email"
-          className="h-10 rounded-md border border-border px-3 text-gov-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-10 rounded-md border border-border px-3 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring"
           placeholder="nome@exemplo.gov.br"
         />
         <Message severity="error" variant="feedback">
           Formato de e-mail inválido.
         </Message>
       </div>
-      <p className="text-gov-sm text-muted-foreground">
+      <p className="text-base text-muted-foreground">
         Exemplo de validação de campo — padrão GovBR para mensagem contextual.
       </p>
     </div>
@@ -241,10 +241,10 @@ export const ComBotaoFechar: Story = {
           </Message>
         ) : (
           <div className="flex items-center gap-3">
-            <p className="text-gov-sm text-muted-foreground">Mensagem fechada.</p>
+            <p className="text-base text-muted-foreground">Mensagem fechada.</p>
             <button
               type="button"
-              className="text-gov-sm font-medium text-primary underline"
+              className="text-base font-medium text-primary underline"
               onClick={() => setVisivel(true)}
             >
               Reexibir
@@ -292,10 +292,10 @@ export const ErroComInformacaoComplementar: Story = {
   render: () => (
     <div className="max-w-xl">
       <Message severity="error" title="Falha ao processar o pedido">
-        <span className="text-gov-base font-normal not-italic">
+        <span className="text-up-01 font-normal not-italic">
           O serviço temporário não respondeu.
         </span>{' '}
-        <span className="text-gov-sm italic text-foreground/90">
+        <span className="text-base italic text-foreground/90">
           Código ERR-504 · 2025-03-23 14:32 UTC
         </span>
       </Message>
@@ -316,7 +316,7 @@ export const ConteudoRico: Story = {
     <div className="max-w-xl">
       <Message severity="warning" title="Documentos em falta">
         <p>Para continuar, são necessários:</p>
-        <ul className="mt-2 list-disc pl-5 text-gov-sm">
+        <ul className="mt-2 list-disc pl-5 text-base">
           <li>Identificação oficial com foto</li>
           <li>Comprovativo de morada recente</li>
         </ul>
@@ -344,10 +344,10 @@ export const PosicionamentoDirecionado: Story = {
   render: () => (
     <div className="max-w-lg rounded-md border border-border p-4">
       <div className="flex gap-2 border-b border-border pb-2">
-        <button type="button" className="text-gov-sm font-semibold text-primary">
+        <button type="button" className="text-base font-semibold text-primary">
           Geral
         </button>
-        <button type="button" className="text-gov-sm text-muted-foreground">
+        <button type="button" className="text-base text-muted-foreground">
           Anexos
         </button>
       </div>

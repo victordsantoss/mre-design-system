@@ -47,7 +47,7 @@ const TableRoot = React.forwardRef<HTMLDivElement, TableRootProps>(
         <TableColorsContext.Provider value={colors}>
           <div
             ref={ref}
-            className={cn('overflow-hidden', className)}
+            className={cn('overflow-hidden font-body', className)}
             style={{
               border: `1px solid ${colors.dividerStrong}`,
               borderRadius: 4,
@@ -91,7 +91,7 @@ function TableTitleBar({ title, actions, className }: TableTitleBarProps) {
       }}
     >
       <span
-        className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-gov-base font-semibold leading-snug"
+        className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-heading text-up-01 font-semibold leading-snug"
         style={{ color: c.titleFg }}
       >
         {title}
@@ -125,7 +125,7 @@ function TableContextualBar({ open, children, className }: TableContextualBarPro
   return (
     <div
       className={cn(
-        'flex w-full min-w-0 flex-wrap items-center justify-between gap-4 text-base font-medium',
+        'flex w-full min-w-0 flex-wrap items-center justify-between gap-4 font-body text-base font-medium',
         '[&>*:first-child]:min-w-0 [&>*:first-child]:flex-1 [&>*:not(:first-child)]:shrink-0',
         className,
       )}
@@ -307,7 +307,7 @@ const TableHeaderCell = React.forwardRef<HTMLTableCellElement, TableHeaderCellPr
         type="button"
         onClick={onSortClick}
         className={cn(
-          'inline-flex items-center gap-1 rounded-sm text-gov-base font-semibold',
+          'inline-flex items-center gap-1 rounded-sm font-heading text-up-01 font-semibold',
           onSortClick ? 'cursor-pointer' : 'cursor-default',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1',
         )}
@@ -319,7 +319,7 @@ const TableHeaderCell = React.forwardRef<HTMLTableCellElement, TableHeaderCellPr
          <SortNeutralIcon />}
       </button>
     ) : (
-      <span className="text-gov-base font-semibold" style={{ color: c.headerTextPlain }}>
+      <span className="font-heading text-up-01 font-semibold" style={{ color: c.headerTextPlain }}>
         {children}
       </span>
     )
@@ -398,7 +398,7 @@ const TableBodyCell = React.forwardRef<HTMLTableCellElement, TableBodyCellProps>
       <td
         ref={ref}
         {...rest}
-        className={cn('align-middle text-gov-base font-medium', showV && 'border-r last:border-r-0', className)}
+        className={cn('align-middle font-body text-up-01 font-medium', showV && 'border-r last:border-r-0', className)}
         style={{
           ...pad,
           borderBottom: `1px solid ${c.divider}`,
@@ -491,7 +491,7 @@ function TableFooterBar({ children, className, style, ...rest }: TableFooterBarP
   return (
     <div
       role="toolbar"
-      className={cn('flex flex-wrap items-center justify-end gap-4 border-t text-gov-base font-medium', className)}
+      className={cn('flex flex-wrap items-center justify-end gap-4 border-t font-body text-up-01 font-medium', className)}
       style={{
         ...pad,
         borderTopColor: c.divider,

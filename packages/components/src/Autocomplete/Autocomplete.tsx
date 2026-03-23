@@ -116,7 +116,7 @@ export function Autocomplete<T extends AutocompleteOption = AutocompleteOption>(
   }
 
   return (
-    <div ref={wrapRef} className={cn('relative w-full', className)}>
+    <div ref={wrapRef} className={cn('relative w-full font-body', className)}>
       <Input
         id={inputId}
         label={label}
@@ -153,9 +153,9 @@ export function Autocomplete<T extends AutocompleteOption = AutocompleteOption>(
           className="absolute z-50 mt-1 max-h-[530px] w-full overflow-y-auto rounded-sm border border-border bg-card py-0 shadow-popover"
         >
           {loading ? (
-            <li className="px-4 py-3 text-gov-base text-muted-foreground">Carregando…</li>
+            <li className="px-4 py-3 text-up-01 text-muted-foreground">Carregando…</li>
           ) : filtered.length === 0 ? (
-            <li className="flex items-center gap-2 px-4 py-3 text-gov-base text-muted-foreground">
+            <li className="flex items-center gap-2 px-4 py-3 text-up-01 text-muted-foreground">
               <span>Nenhum resultado encontrado</span>
             </li>
           ) : (
@@ -165,7 +165,7 @@ export function Autocomplete<T extends AutocompleteOption = AutocompleteOption>(
                 role="option"
                 aria-selected={i === highlighted}
                 className={cn(
-                  'cursor-pointer border-t border-border px-4 py-3 text-gov-base first:border-t-0',
+                  'cursor-pointer border-t border-border px-4 py-3 text-up-01 first:border-t-0',
                   i === highlighted && 'bg-primary/10',
                 )}
                 onMouseEnter={() => setHighlighted(i)}

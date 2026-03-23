@@ -155,12 +155,12 @@ function SelectInner<T extends string | number = string>(
   const raw = value === null || value === undefined ? '' : String(value)
 
   return (
-    <div className={cn('flex', inline ? 'flex-row items-center gap-4' : 'flex-col gap-1', fullWidth ? 'w-full' : '', className)}>
+    <div className={cn('flex font-body', inline ? 'flex-row items-center gap-4' : 'flex-col gap-1', fullWidth ? 'w-full' : '', className)}>
       {label && (
         <label
           htmlFor={resolvedId}
           className={cn(
-            'text-gov-sm font-semibold text-foreground',
+            'text-base font-semibold text-foreground',
             disabled && 'opacity-45',
             inline ? 'shrink-0' : '',
           )}
@@ -203,7 +203,7 @@ function SelectInner<T extends string | number = string>(
             className={cn(
               'h-full w-full appearance-none bg-transparent outline-none',
               'pl-3 pr-9',
-              'text-gov-base text-foreground',
+              'text-up-01 text-foreground',
               raw === '' && 'text-muted-foreground',
               highlight && 'pl-4',
             )}
@@ -229,7 +229,7 @@ function SelectInner<T extends string | number = string>(
           <p
             id={helperId}
             className={cn(
-              'flex items-center gap-1 text-gov-sm',
+              'flex items-center gap-1 text-base',
               status ? STATUS_HELPER_COLOR[status] : 'text-muted-foreground',
             )}
           >

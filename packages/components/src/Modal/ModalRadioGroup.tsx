@@ -40,7 +40,7 @@ export function ModalRadioGroup({
   gap = 2,
 }: ModalRadioGroupProps) {
   return (
-    <fieldset className="m-0 min-w-0 border-0 p-0">
+    <fieldset className="m-0 min-w-0 border-0 p-0 font-body">
       <div
         className="flex flex-col"
         style={{ gap: `${gap * spacingAdjust.half}px` }}

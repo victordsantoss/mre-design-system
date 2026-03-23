@@ -141,7 +141,7 @@ export function DatePicker({
   }
 
   return (
-    <div ref={anchorRef} className="relative w-full">
+    <div ref={anchorRef} className="relative w-full font-body">
       <Input
         id={inputId}
         label={label}
@@ -174,7 +174,7 @@ export function DatePicker({
 
       {open && !disabled && (
         <div
-          className="absolute left-0 z-50 mt-1 min-w-[288px] max-w-[320px] rounded-sm border border-border bg-card p-4 shadow-popover"
+          className="absolute left-0 z-50 mt-1 min-w-[288px] max-w-[320px] rounded-sm border border-border bg-card p-4 font-body shadow-popover"
           role="dialog"
           aria-label="Calendário"
         >
@@ -189,7 +189,7 @@ export function DatePicker({
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
-            <span className="text-center text-gov-sm font-semibold capitalize">
+            <span className="text-center font-heading text-base font-semibold capitalize">
               {MONTHS_LONG_PT[view.m]} {view.y}
             </span>
             <button
@@ -229,7 +229,7 @@ export function DatePicker({
                   disabled={dis}
                   onClick={() => onPickDay(date)}
                   className={cn(
-                    'flex h-9 items-center justify-center rounded text-gov-sm',
+                    'flex h-9 items-center justify-center rounded text-base',
                     outside && 'text-muted-foreground/50',
                     dis && 'cursor-not-allowed opacity-40',
                     (selSingle || selStart || selEnd) && 'bg-primary font-semibold text-primary-foreground',
@@ -245,7 +245,7 @@ export function DatePicker({
 
           {withTime && selectionMode === 'single' && (
             <div className="mt-4 flex items-center gap-2 border-t border-border pt-3">
-              <label className="text-gov-sm text-muted-foreground">
+              <label className="text-base text-muted-foreground">
                 Hora
                 <input
                   type="number"
@@ -256,7 +256,7 @@ export function DatePicker({
                   className="ml-2 w-14 rounded border border-input px-1"
                 />
               </label>
-              <label className="text-gov-sm text-muted-foreground">
+              <label className="text-base text-muted-foreground">
                 Min
                 <input
                   type="number"

@@ -56,9 +56,9 @@ const DENSITY_HEIGHT: Record<InputDensity, string> = {
 }
 
 const DENSITY_FONTSIZE: Record<InputDensity, string> = {
-  small:  'text-gov-sm',
-  medium: 'text-gov-base',
-  large:  'text-gov-base',
+  small:  'text-base',
+  medium: 'text-up-01',
+  large:  'text-up-01',
 }
 
 // ─────────────────────────────────────────────
@@ -166,13 +166,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       : 'bg-background border'
 
     return (
-      <div className={cn('flex w-full', inline ? 'flex-row items-center gap-4' : 'flex-col gap-1', className)}>
+      <div className={cn('flex w-full font-body', inline ? 'flex-row items-center gap-4' : 'flex-col gap-1', className)}>
         {/* Rótulo */}
         {label && (
           <label
             htmlFor={resolvedId}
             className={cn(
-              'text-gov-sm font-semibold text-foreground',
+              'text-base font-semibold text-foreground',
               disabled && 'opacity-45',
               inline ? 'shrink-0' : '',
             )}
@@ -237,7 +237,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <p
               id={helperId}
               className={cn(
-                'flex items-center gap-1 text-gov-sm',
+                'flex items-center gap-1 text-base',
                 status ? STATUS_HELPER_COLOR[status] : 'text-muted-foreground',
               )}
             >

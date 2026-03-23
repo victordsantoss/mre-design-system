@@ -37,7 +37,7 @@ const DesignSystemProvider = React.forwardRef<HTMLDivElement, DesignSystemProvid
         ref={ref}
         className={cn(
           colorScheme === 'dark' && 'dark',
-          'min-h-full',
+          'min-h-full font-body',
           className,
         )}
       >

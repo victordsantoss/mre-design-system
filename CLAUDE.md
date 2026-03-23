@@ -74,7 +74,7 @@ yarn workspace @ds/tokens run build
 - **Família**: Rawline (Raleway como fallback) — `font-sans`
 - **Escala**: Minor Third (razão 1.2), base = 14px
 - **Line-height**: 1.15 (headings) / 1.45 (body)
-- **Classes Tailwind**: `text-gov-xs`, `text-gov-sm`, `text-gov-base`, `text-gov-lg`, ..., `text-gov-5xl`
+- **Classes Tailwind (escala `@ds/tokens` / `fontSizes`)**: `text-down-03` … `text-down-01`, `text-base` (14px), `text-up-01` … `text-up-07`
 
 ### CSS custom properties (light / dark)
 
