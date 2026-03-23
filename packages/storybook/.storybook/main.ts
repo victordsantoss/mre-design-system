@@ -27,13 +27,18 @@ const config: StorybookConfig = {
           replacement,
         }))
 
-    // Só `@ds/tokens` e `@ds/components` exatos → fonte TS (HMR). Subpaths como
-    // `@ds/tokens/ds-generated-theme.css` seguem `package.json` exports → dist.
+    // `@ds/tokens` exato → fonte TS (HMR). CSS gerado: caminho explícito para o
+    // PostCSS/Vite resolver (evita ENOENT / `index.ts/ds-generated-theme.css`).
+    const tokensDist = path.resolve(__dirname, '../../tokens/dist')
     return {
       ...config,
       resolve: {
         ...config.resolve,
         alias: [
+          {
+            find: /^@ds\/tokens\/ds-generated-theme\.css$/,
+            replacement: path.join(tokensDist, 'ds-generated-theme.css'),
+          },
           {
             find: /^@ds\/components$/,
             replacement: path.resolve(__dirname, '../../components/src/index.ts'),
