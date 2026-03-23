@@ -1,24 +1,22 @@
+import type { CSSProperties } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { Typography } from '@ds/components'
+import { Typography, type TypographyVariant } from '@ds/components'
+import { semanticTypography } from '@ds/tokens'
+
+const variantOptions = Object.keys(semanticTypography) as TypographyVariant[]
 
 /**
- * O componente **Typography** é o sistema tipográfico central do Design System.
+ * O componente **Typography** aplica os estilos definidos em `semanticTypography` (`@ds/tokens`):
+ * família, tamanho (escala Minor Third, base 14px), peso, altura de linha e letter-spacing.
  *
- * Encapsula todas as variantes de texto — display, headings, body, labels e code —
- * com semântica HTML correta por padrão e flexibilidade total via props.
- *
- * ## Princípios
- * - **Semântica**: cada variante usa o elemento HTML adequado por padrão
- * - **Override**: prop `as` desacopla estilo visual de semântica
- * - **Tokens**: integrado com `@ds/tokens` via Tailwind CSS custom properties
- * - **Responsividade**: prop `responsive` escala texto via breakpoints mobile-first
+ * Cor, alinhamento, truncamento e decorações usam utilitários Tailwind via `typographyLayoutVariants`.
  *
  * ## Uso básico
  * ```tsx
  * import { Typography } from '@ds/components'
  *
- * <Typography variant="heading-lg">Título da página</Typography>
- * <Typography variant="body-md" color="muted">Subtexto de apoio</Typography>
+ * <Typography variant="h2">Título da página</Typography>
+ * <Typography variant="body2" color="muted">Subtexto de apoio</Typography>
  * ```
  */
 const meta: Meta<typeof Typography> = {
@@ -30,26 +28,20 @@ const meta: Meta<typeof Typography> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: [
-        'display-2xl', 'display-xl', 'display-lg',
-        'heading-xl', 'heading-lg', 'heading-md', 'heading-sm', 'heading-xs',
-        'body-lg', 'body-md', 'body-sm', 'body-xs',
-        'label-lg', 'label-md', 'label-sm',
-        'code-lg', 'code-md', 'code-sm',
-      ],
-      description: 'Estilo tipográfico. Cada variante define tamanho, peso e line-height.',
-      table: { defaultValue: { summary: 'body-md' } },
+      options: variantOptions,
+      description: 'Chave em semanticTypography (@ds/tokens).',
+      table: { defaultValue: { summary: 'body2' } },
     },
     color: {
       control: 'select',
       options: ['default', 'muted', 'primary', 'destructive', 'success', 'warning', 'inherit'],
-      description: 'Cor semântica do texto via CSS custom properties.',
+      description: 'Cor semântica do texto (Tailwind).',
       table: { defaultValue: { summary: 'default' } },
     },
     weight: {
       control: 'select',
       options: ['thin', 'extralight', 'light', 'normal', 'medium', 'semibold', 'bold', 'extrabold', 'black'],
-      description: 'Sobrescreve o font-weight da variante.',
+      description: 'Sobrescreve o font-weight do token.',
     },
     align: {
       control: 'select',
@@ -58,11 +50,11 @@ const meta: Meta<typeof Typography> = {
     },
     as: {
       control: 'text',
-      description: 'Sobrescreve o elemento HTML renderizado (ex: "h1", "p", "span", "label").',
+      description: 'Sobrescreve o elemento HTML (ex: "h1", "p", "span", "label").',
     },
     italic: {
       control: 'boolean',
-      description: 'Aplica estilo itálico.',
+      description: 'Aplica estilo itálico (Tailwind).',
     },
     underline: {
       control: 'boolean',
@@ -75,11 +67,7 @@ const meta: Meta<typeof Typography> = {
     clamp: {
       control: 'select',
       options: [undefined, 1, 2, 3, 4, 5, 6],
-      description: 'Limita o texto a N linhas com reticências (CSS line-clamp).',
-    },
-    responsive: {
-      control: 'boolean',
-      description: 'Ativa escala responsiva mobile-first para variantes display e heading.',
+      description: 'Limita o texto a N linhas (line-clamp).',
     },
   },
 }
@@ -87,133 +75,134 @@ const meta: Meta<typeof Typography> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// ─────────────────────────────────────────────
-// Playground
-// ─────────────────────────────────────────────
-
 /** Controle interativo de todas as props. */
 export const Playground: Story = {
   args: {
-    variant: 'body-md',
+    variant: 'body2',
     children: 'O Design System garante consistência visual em toda a aplicação.',
   },
 }
 
-// ─────────────────────────────────────────────
-// Escala tipográfica completa
-// ─────────────────────────────────────────────
+const sectionLabelSx: CSSProperties = {
+  marginBottom: '16px',
+  display: 'block',
+}
 
-/** Visão geral de toda a escala tipográfica em um só lugar. */
+/** Escala GovBR (tamanhos aproximados em px com html 16px). */
 export const TypographyScale: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      {/* Display */}
       <section>
-        <Typography variant="label-sm" color="muted" style={{ marginBottom: '16px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+        <Typography variant="overline" color="muted" style={sectionLabelSx}>
           Display
         </Typography>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <Typography variant="display-2xl">Display 2XL — 60px / Bold</Typography>
-          <Typography variant="display-xl">Display XL — 48px / Bold</Typography>
-          <Typography variant="display-lg">Display LG — 36px / Bold</Typography>
+          <Typography variant="display">
+            display — 50,16px / light / line-height 1,15
+          </Typography>
         </div>
       </section>
 
-      {/* Headings */}
       <section>
-        <Typography variant="label-sm" color="muted" style={{ marginBottom: '16px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+        <Typography variant="overline" color="muted" style={sectionLabelSx}>
           Headings
         </Typography>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <Typography variant="heading-xl">Heading XL — 30px / Semibold</Typography>
-          <Typography variant="heading-lg">Heading LG — 24px / Semibold</Typography>
-          <Typography variant="heading-md">Heading MD — 20px / Semibold</Typography>
-          <Typography variant="heading-sm">Heading SM — 18px / Semibold</Typography>
-          <Typography variant="heading-xs">Heading XS — 16px / Semibold</Typography>
+          <Typography variant="h1">h1 — 41,8px / light</Typography>
+          <Typography variant="h2">h2 — 34,84px / regular</Typography>
+          <Typography variant="h3">h3 — 29,03px / medium</Typography>
+          <Typography variant="h4">h4 — 24,19px / semi-bold</Typography>
+          <Typography variant="h5">h5 — 20,16px / bold</Typography>
+          <Typography variant="h6">h6 — 16,8px / extra-bold / maiúsculas</Typography>
         </div>
       </section>
 
-      {/* Body */}
       <section>
-        <Typography variant="label-sm" color="muted" style={{ marginBottom: '16px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-          Body
+        <Typography variant="overline" color="muted" style={sectionLabelSx}>
+          Corpo
         </Typography>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Typography variant="body-lg">Body LG — 18px / Normal / Relaxed — Ideal para leitura de artigos e conteúdos longos.</Typography>
-          <Typography variant="body-md">Body MD — 16px / Normal — Texto padrão de interface, parágrafos e descrições gerais.</Typography>
-          <Typography variant="body-sm">Body SM — 14px / Normal — Textos secundários, tooltips e metadados.</Typography>
-          <Typography variant="body-xs">Body XS — 12px / Normal — Textos de suporte, avisos e rodapés.</Typography>
+          <Typography variant="body1">
+            body1 — 16,8px / regular / line-height 1,45 — Parágrafo destacado ou introduções.
+          </Typography>
+          <Typography variant="body2">
+            body2 — 14px / regular — Texto padrão de interface e parágrafos.
+          </Typography>
         </div>
       </section>
 
-      {/* Labels */}
       <section>
-        <Typography variant="label-sm" color="muted" style={{ marginBottom: '16px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-          Labels
+        <Typography variant="overline" color="muted" style={sectionLabelSx}>
+          UI e componentes
         </Typography>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Typography variant="label-lg">Label LG — 16px / Medium — Rótulos de formulários, títulos de seção</Typography>
-          <Typography variant="label-md">Label MD — 14px / Medium — Labels padrão de campos e filtros</Typography>
-          <Typography variant="label-sm">Label SM — 12px / Medium / Wide — Badges, status e categorias</Typography>
-        </div>
-      </section>
-
-      {/* Code */}
-      <section>
-        <Typography variant="label-sm" color="muted" style={{ marginBottom: '16px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-          Code
-        </Typography>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Typography variant="code-lg">const greeting = "Olá, Design System!"</Typography>
-          <Typography variant="code-md">yarn add @ds/components</Typography>
-          <Typography variant="code-sm">{"<Typography variant=\"body-md\" />"}</Typography>
+          <Typography variant="label">label — 14px / semi-bold — Rótulos de formulário</Typography>
+          <Typography variant="input">input — 16,8px / medium — Texto de campo</Typography>
+          <Typography variant="placeholder">placeholder — 14px / regular / itálico</Typography>
+          <Typography variant="legend">legend — 16,8px / semi-bold — Legenda de fieldset</Typography>
+          <Typography variant="caption">caption — 11,67px / regular — Metadados e notas</Typography>
+          <Typography variant="overline">overline — 14px / semi-bold / maiúsculas</Typography>
+          <Typography variant="button">button — 16,8px / semi-bold — Rótulo de botão</Typography>
+          <Typography variant="code">code — 14px / medium / monospace</Typography>
         </div>
       </section>
     </div>
   ),
 }
 
-// ─────────────────────────────────────────────
-// Cores semânticas
-// ─────────────────────────────────────────────
-
-/** Todas as variações de cor disponíveis. */
+/** Variações de cor semântica (Tailwind). */
 export const SemanticColors: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <Typography variant="body-md" color="default">color="default" — Texto principal da interface</Typography>
-      <Typography variant="body-md" color="muted">color="muted" — Texto secundário e de apoio</Typography>
-      <Typography variant="body-md" color="primary">color="primary" — Destaque e ações principais</Typography>
-      <Typography variant="body-md" color="destructive">color="destructive" — Erros, alertas e ações destrutivas</Typography>
-      <Typography variant="body-md" color="success">color="success" — Confirmações e estados de sucesso</Typography>
-      <Typography variant="body-md" color="warning">color="warning" — Avisos e estados de atenção</Typography>
+      <Typography variant="body2" color="default">
+        color=&quot;default&quot; — Texto principal
+      </Typography>
+      <Typography variant="body2" color="muted">
+        color=&quot;muted&quot; — Texto secundário
+      </Typography>
+      <Typography variant="body2" color="primary">
+        color=&quot;primary&quot; — Destaque
+      </Typography>
+      <Typography variant="body2" color="destructive">
+        color=&quot;destructive&quot; — Erro / destrutivo
+      </Typography>
+      <Typography variant="body2" color="success">
+        color=&quot;success&quot; — Sucesso
+      </Typography>
+      <Typography variant="body2" color="warning">
+        color=&quot;warning&quot; — Aviso
+      </Typography>
     </div>
   ),
 }
 
-// ─────────────────────────────────────────────
-// Override semântico com `as`
-// ─────────────────────────────────────────────
-
 /**
- * O `as` desacopla estilo visual de semântica HTML.
- * Útil quando o nível hierárquico de heading já está definido
- * na página mas o estilo visual precisa ser diferente.
+ * A prop `as` desacopla estilo visual (token) da semântica HTML.
  */
 export const SemanticOverride: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div>
-        <Typography variant="label-sm" color="muted">heading-lg renderizado como h1 (única âncora de página)</Typography>
-        <Typography variant="heading-lg" as="h1">Título Principal da Página</Typography>
+        <Typography variant="caption" color="muted">
+          h2 com aparência de token h2, renderizado como único h1 da página
+        </Typography>
+        <Typography variant="h2" as="h1">
+          Título principal da página
+        </Typography>
       </div>
       <div>
-        <Typography variant="label-sm" color="muted">display-xl com estilo visual mas semântica de parágrafo</Typography>
-        <Typography variant="display-xl" as="p">Frase de impacto sem criar h1</Typography>
+        <Typography variant="caption" color="muted">
+          display com semântica de parágrafo
+        </Typography>
+        <Typography variant="display" as="p">
+          Frase de impacto sem usar heading
+        </Typography>
       </div>
       <div>
-        <Typography variant="label-sm" color="muted">label-md como &lt;label&gt; nativo para formulários</Typography>
-        <Typography variant="label-md" as="label" htmlFor="email">
+        <Typography variant="caption" color="muted">
+          label como &lt;label&gt; nativo
+        </Typography>
+        <Typography variant="label" as="label" htmlFor="email-story">
           Endereço de e-mail
         </Typography>
       </div>
@@ -221,101 +210,80 @@ export const SemanticOverride: Story = {
   ),
 }
 
-// ─────────────────────────────────────────────
-// Responsividade
-// ─────────────────────────────────────────────
-
-/**
- * Com `responsive={true}` as variantes de display e heading
- * escalam usando breakpoints mobile-first (sm / lg).
- * Redimensione a janela para visualizar o efeito.
- */
-export const ResponsiveScale: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <Typography variant="label-sm" color="muted">Com responsive=&#123;true&#125;</Typography>
-      <Typography variant="display-2xl" responsive>Título responsivo — cresce em telas maiores</Typography>
-      <Typography variant="heading-lg" responsive>Subtítulo que escala com o viewport</Typography>
-      <Typography variant="label-sm" color="muted" style={{ marginTop: '16px' }}>Sem responsive (tamanho fixo)</Typography>
-      <Typography variant="display-2xl">Título fixo — sempre 60px</Typography>
-    </div>
-  ),
-}
-
-// ─────────────────────────────────────────────
-// Overflow: truncate e clamp
-// ─────────────────────────────────────────────
-
-/** Controle de overflow para textos longos. */
+/** Truncamento e line-clamp. */
 export const OverflowControl: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '400px' }}>
       <div>
-        <Typography variant="label-sm" color="muted">truncate — uma linha</Typography>
-        <Typography variant="body-md" truncate>
-          Este texto é muito longo e será truncado com reticências após ultrapassar a largura do container pai.
+        <Typography variant="caption" color="muted">
+          truncate — uma linha
+        </Typography>
+        <Typography variant="body2" truncate>
+          Este texto é muito longo e será truncado com reticências após ultrapassar a largura do container
+          pai.
         </Typography>
       </div>
       <div>
-        <Typography variant="label-sm" color="muted">clamp=&#123;2&#125; — duas linhas</Typography>
-        <Typography variant="body-md" clamp={2}>
-          Este texto mais longo será limitado a exatamente duas linhas. O restante do conteúdo que não couber
-          será cortado e substituído por reticências ao final da segunda linha visível.
+        <Typography variant="caption" color="muted">
+          clamp=&#123;2&#125;
+        </Typography>
+        <Typography variant="body2" clamp={2}>
+          Este texto mais longo será limitado a exatamente duas linhas. O restante será cortado e substituído
+          por reticências ao final da segunda linha.
         </Typography>
       </div>
       <div>
-        <Typography variant="label-sm" color="muted">clamp=&#123;3&#125; — três linhas</Typography>
-        <Typography variant="body-md" clamp={3}>
-          Três linhas de texto disponíveis antes do clamp ser aplicado. Isso é útil para cartões de conteúdo,
-          previews de artigo e qualquer situação onde você precisa manter um layout consistente mas exibir
-          algum contexto do conteúdo ao usuário antes do clamp entrar em ação.
+        <Typography variant="caption" color="muted">
+          clamp=&#123;3&#125;
+        </Typography>
+        <Typography variant="body2" clamp={3}>
+          Três linhas de texto antes do clamp. Útil para cartões e previews mantendo layout estável com um
+          pouco mais de contexto visível.
         </Typography>
       </div>
     </div>
   ),
 }
 
-// ─────────────────────────────────────────────
-// Composição real
-// ─────────────────────────────────────────────
-
-/** Exemplo de uso em uma seção de artigo real. */
+/** Exemplo de composição. */
 export const ArticleSection: Story = {
   render: () => (
     <article style={{ maxWidth: '640px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Typography variant="label-sm" color="primary">Design Systems</Typography>
-      <Typography variant="display-lg" as="h1">
-        Construindo interfaces consistentes com tokens de design
+      <Typography variant="caption" color="primary">
+        Design systems
       </Typography>
-      <Typography variant="body-lg" color="muted">
-        Tokens de design são os valores atômicos que definem a linguagem visual de um produto:
-        cores, tipografia, espaçamento e elevação.
+      <Typography variant="display" as="h1">
+        Interfaces consistentes com tokens de design
       </Typography>
-      <Typography variant="body-md">
-        Ao centralizar esses valores em um único lugar, equipes de produto conseguem
-        manter consistência visual entre plataformas, acelerar o desenvolvimento de
-        novas features e facilitar a aplicação de mudanças globais de tema.
+      <Typography variant="body1" color="muted">
+        Tokens definem a linguagem visual: cores, tipografia, espaçamento e elevação.
       </Typography>
-      <Typography variant="body-sm" color="muted">
-        Publicado em 19 de março de 2026 · 5 min de leitura
+      <Typography variant="body2">
+        Centralizar esses valores permite manter consistência entre plataformas e aplicar mudanças globais
+        com menos retrabalho.
+      </Typography>
+      <Typography variant="caption" color="muted">
+        Publicado em 23 de março de 2026 · 5 min de leitura
       </Typography>
     </article>
   ),
 }
 
-// ─────────────────────────────────────────────
-// Decoração
-// ─────────────────────────────────────────────
-
-/** Props de decoração: italic e underline. */
+/** Itálico, sublinhado e peso sobrescrito. */
 export const Decoration: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <Typography variant="body-md" italic>Texto em itálico para ênfase ou citações</Typography>
-      <Typography variant="body-md" underline>Texto sublinhado para links e destaques</Typography>
-      <Typography variant="body-md" italic underline>Itálico e sublinhado combinados</Typography>
-      <Typography variant="body-md" weight="bold" color="primary">
-        Bold + primary — chamada para ação em linha
+      <Typography variant="body2" italic>
+        Texto em itálico
+      </Typography>
+      <Typography variant="body2" underline>
+        Texto sublinhado
+      </Typography>
+      <Typography variant="body2" italic underline>
+        Itálico e sublinhado
+      </Typography>
+      <Typography variant="body2" weight="bold" color="primary">
+        weight=&quot;bold&quot; + color=&quot;primary&quot;
       </Typography>
     </div>
   ),

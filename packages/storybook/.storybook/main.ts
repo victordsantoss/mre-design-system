@@ -1,4 +1,4 @@
-import path from 'node:path'
+import path from 'path'
 import type { StorybookConfig } from '@storybook/react-vite'
 
 const config: StorybookConfig = {
@@ -19,15 +19,31 @@ const config: StorybookConfig = {
     reactDocgen: 'react-docgen-typescript',
   },
   async viteFinal(config) {
+    const rawAlias = config.resolve?.alias
+    const restAliases = Array.isArray(rawAlias)
+      ? rawAlias
+      : Object.entries((rawAlias ?? {}) as Record<string, string>).map(([find, replacement]) => ({
+          find,
+          replacement,
+        }))
+
+    // Só `@ds/tokens` e `@ds/components` exatos → fonte TS (HMR). Subpaths como
+    // `@ds/tokens/ds-generated-theme.css` seguem `package.json` exports → dist.
     return {
       ...config,
       resolve: {
         ...config.resolve,
-        alias: {
-          ...config.resolve?.alias,
-          '@ds/components': path.resolve(__dirname, '../../components/src/index.ts'),
-          '@ds/tokens': path.resolve(__dirname, '../../tokens/src/index.ts'),
-        },
+        alias: [
+          {
+            find: /^@ds\/components$/,
+            replacement: path.resolve(__dirname, '../../components/src/index.ts'),
+          },
+          {
+            find: /^@ds\/tokens$/,
+            replacement: path.resolve(__dirname, '../../tokens/src/index.ts'),
+          },
+          ...restAliases,
+        ],
       },
     }
   },
