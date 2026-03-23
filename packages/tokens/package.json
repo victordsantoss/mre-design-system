@@ -10,11 +10,12 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    }
+    },
+    "./ds-generated-theme.css": "./dist/ds-generated-theme.css"
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node ./scripts/write-theme-css.mjs",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "lint": "eslint src/"

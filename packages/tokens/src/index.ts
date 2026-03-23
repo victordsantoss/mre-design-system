@@ -69,6 +69,28 @@ export {
 
 // Semantic
 export { govEspecificacao } from './semantic/gov-spec'
-export { semanticColors } from './semantic/colors'
+export {
+  semanticColors,
+  semanticColorsLight,
+  semanticColorsDark,
+  type SemanticColorTheme,
+} from './semantic/colors'
 export { semanticTypography } from './semantic/typography'
 export { surfaceComponent } from './semantic/surfaces'
+
+// Tailwind / CSS gerados a partir dos tokens (sem dependência de tailwindcss)
+export { getDesignSystemThemeCss } from './tailwind-theme/generate-theme-css'
+export {
+  buildBorderRadiusExtend,
+  buildBoxShadowExtend,
+  buildDsColorTree,
+  buildFontFamilyExtend,
+  buildFontSizeExtend,
+  buildSpacingExtend,
+  buildTransitionDurationExtend,
+  buildUiColorExtend,
+  lineHeightForFontScaleKey,
+} from './tailwind-theme/tailwind-config-data'
+export { buildTypographyUtilityStyles } from './tailwind-theme/typography-plugin-data'
+export { flattenSemanticColorVars, formatCssCustomProperties } from './tailwind-theme/flatten-semantic-colors'
+export { uiColorVarAliases } from './tailwind-theme/ui-color-bindings'
