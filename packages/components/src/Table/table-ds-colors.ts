@@ -2,7 +2,8 @@
 
 import { useSyncExternalStore } from 'react'
 import {
-  semanticColors,
+  semanticColorsLight,
+  semanticColorsDark,
   gray,
   pure,
   blueWarmVivid,
@@ -11,12 +12,12 @@ import { alpha } from '../utils/color-alpha'
 import type { DsTableColors } from './types'
 
 export function createTableDsLight(): DsTableColors {
-  const paper = semanticColors.background.paper
-  const text = semanticColors.text.primary
-  const textMuted = semanticColors.text.secondary
-  const pm = semanticColors.primary.main
-  const pd = semanticColors.primary.dark
-  const ct = semanticColors.primary.contrastText
+  const paper = semanticColorsLight.background.paper
+  const text = semanticColorsLight.text.primary
+  const textMuted = semanticColorsLight.text.secondary
+  const pm = semanticColorsLight.primary.main
+  const pd = semanticColorsLight.primary.dark
+  const ct = semanticColorsLight.primary.contrastText
   return {
     outerBg: paper,
     titleFg: text,
@@ -49,11 +50,11 @@ export function createTableDsLight(): DsTableColors {
 }
 
 export function createTableDsDark(): DsTableColors {
-  const navy = semanticColors.secondary.main
-  const white = pure[0]
-  const pm = semanticColors.interactiveOnDark.main
+  const navy = semanticColorsDark.background.default
+  const white = semanticColorsDark.text.primary
+  const pm = semanticColorsDark.interactiveOnDark.main
   const pl = blueWarmVivid[10]
-  const pcon = semanticColors.interactiveOnDark.contrastText
+  const pcon = semanticColorsDark.interactiveOnDark.contrastText
   return {
     outerBg: navy,
     titleFg: white,
