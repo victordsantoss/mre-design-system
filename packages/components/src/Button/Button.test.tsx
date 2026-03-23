@@ -9,17 +9,25 @@ describe('Button', () => {
     expect(button).toBeInTheDocument()
     expect(button).not.toBeDisabled()
     expect(button).toHaveClass('h-10')
+    expect(button).toHaveAttribute('data-emphasis', 'primary')
+    expect(button).toHaveAttribute('data-intent', 'default')
   })
 
   it('renders emphasis variants', () => {
     const { rerender } = render(<Button emphasis="primary">P</Button>)
-    expect(screen.getByRole('button')).toHaveClass('bg-primary')
+    let btn = screen.getByRole('button')
+    expect(btn).toHaveAttribute('data-emphasis', 'primary')
+    expect(btn).toHaveClass('bg-primary')
 
     rerender(<Button emphasis="secondary">S</Button>)
-    expect(screen.getByRole('button')).toHaveClass('border', 'bg-pure-0')
+    btn = screen.getByRole('button')
+    expect(btn).toHaveAttribute('data-emphasis', 'secondary')
+    expect(btn).toHaveClass('border', 'bg-pure-0')
 
     rerender(<Button emphasis="tertiary">T</Button>)
-    expect(screen.getByRole('button')).toHaveClass('border-0', 'bg-transparent')
+    btn = screen.getByRole('button')
+    expect(btn).toHaveAttribute('data-emphasis', 'tertiary')
+    expect(btn).toHaveClass('border-0', 'bg-transparent')
   })
 
   it('renders density heights (GovBR 32 / 40 / 48)', () => {
@@ -42,7 +50,11 @@ describe('Button', () => {
 
   it('can be disabled', () => {
     const onClick = vi.fn()
-    render(<Button disabled onClick={onClick}>Disabled</Button>)
+    render(
+      <Button disabled onClick={onClick}>
+        Disabled
+      </Button>,
+    )
     const button = screen.getByRole('button')
     expect(button).toBeDisabled()
     fireEvent.click(button)
@@ -98,5 +110,6 @@ describe('CircleButton', () => {
     )
     const btn = screen.getByRole('button')
     expect(btn).toHaveClass('h-10', 'w-10')
+    expect(btn).toHaveAttribute('data-intent', 'default')
   })
 })
