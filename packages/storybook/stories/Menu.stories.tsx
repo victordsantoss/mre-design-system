@@ -73,7 +73,7 @@ export const Playground: Story = {
     const [open, setOpen] = useState(false)
     return (
       <div className="p-6">
-        <Button emphasis="primary" onClick={() => setOpen(true)}>
+        <Button emphasis="primary" aria-controls="menu-playground" aria-expanded={open} onClick={() => setOpen(true)}>
           Abrir menu
         </Button>
         <Menu
@@ -100,7 +100,7 @@ export const OffCanvas: Story = {
     const [open, setOpen] = useState(false)
     return (
       <div className="p-6">
-        <Button emphasis="primary" onClick={() => setOpen(true)}>Abrir menu</Button>
+        <Button emphasis="primary" aria-expanded={open} onClick={() => setOpen(true)}>Abrir menu</Button>
         <Menu
           open={open}
           onClose={() => setOpen(false)}
@@ -119,7 +119,7 @@ export const Contextual: Story = {
     const [open, setOpen] = useState(false)
     return (
       <div className="p-6">
-        <Button emphasis="secondary" onClick={() => setOpen(true)}>Bottom sheet</Button>
+        <Button emphasis="secondary" aria-expanded={open} onClick={() => setOpen(true)}>Bottom sheet</Button>
         <Menu
           open={open}
           onClose={() => setOpen(false)}

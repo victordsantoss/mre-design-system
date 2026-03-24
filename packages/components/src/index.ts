@@ -79,6 +79,24 @@ export {
 } from './Message'
 export { Alert, type AlertProps } from './Alert'
 export {
+  Item,
+  type ItemProps,
+  type ItemDensity,
+} from './Item'
+export {
+  Divider,
+  type DividerProps,
+  type DividerOrientation,
+  type DividerThickness,
+} from './Divider'
+export {
+  Header,
+  type HeaderProps,
+  type HeaderDensity,
+  type HeaderLink,
+  type HeaderFunctionItem,
+} from './Header'
+export {
   Menu,
   type MenuProps,
   type MenuDensity,
@@ -145,4 +163,21 @@ export {
   type DesignSystemProviderProps,
   type ColorScheme,
 } from './Provider'
+export {
+  List,
+  ListHeader,
+  ListLabel,
+  ListGroup,
+  type ListProps,
+  type ListHeaderProps,
+  type ListLabelProps,
+  type ListGroupProps,
+} from './List'
+export {
+  Footer,
+  type FooterProps,
+  type FooterLogoAlign,
+  type FooterCategory,
+  type FooterSocialLink,
+} from './Footer'
 export { cn } from './utils/cn'
