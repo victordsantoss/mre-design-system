@@ -11,7 +11,15 @@ import {
   CardMedia,
   Button,
   Input,
+  type CardProps,
 } from '@ds/components'
+
+type PlaygroundArgs = CardProps & {
+  layout?: 'default' | 'frente-verso' | 'expansivel'
+  showIcon?: boolean
+  showMedia?: boolean
+  showFooterButtons?: boolean
+}
 
 const CARD_DOCS = [
   '## Card (Cartão)',
@@ -148,24 +156,170 @@ const meta: Meta<typeof Card> = {
 export default meta
 type Story = StoryObj<typeof Card>
 
-export const Playground: Story = {
+const IcDoc = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+  </svg>
+)
+
+export const Playground: StoryObj<PlaygroundArgs> = {
+  render: function PlaygroundRender({
+    layout = 'default',
+    showIcon = false,
+    showMedia = false,
+    showFooterButtons = false,
+    hover,
+    disabled,
+    dragged,
+    fixedHeight,
+    contentHeight,
+  }: PlaygroundArgs) {
+    const [back, setBack] = useState(false)
+    const [expanded, setExpanded] = useState(false)
+
+    if (layout === 'frente-verso') {
+      return (
+        <Card className="w-[320px] overflow-hidden" hover={hover} disabled={disabled}>
+          {!back ? (
+            <>
+              <CardHeader>
+                <CardTitle>Frente</CardTitle>
+                <CardDescription>Informação principal sempre visível.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-base text-muted-foreground">
+                  Clique em "Ver detalhes" para acessar o verso do cartão.
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button emphasis="tertiary" type="button" onClick={() => setBack(true)}>
+                  Ver detalhes
+                </Button>
+              </CardFooter>
+            </>
+          ) : (
+            <div className="bg-[var(--color-card-back)]">
+              <CardHeader>
+                <CardTitle>Verso</CardTitle>
+                <CardDescription>Texto complementar — fundo diferenciado.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-base text-foreground">
+                  Menos relevante que a frente; o contraste do fundo sinaliza o contexto alternado.
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button emphasis="tertiary" type="button" onClick={() => setBack(false)}>
+                  Voltar
+                </Button>
+              </CardFooter>
+            </div>
+          )}
+        </Card>
+      )
+    }
+
+    if (layout === 'expansivel') {
+      return (
+        <Card className="w-[340px]" hover={hover} disabled={disabled}>
+          <CardHeader>
+            <CardTitle>Resumo</CardTitle>
+            <CardDescription>Informação principal sempre visível.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-base text-muted-foreground">
+              Use o botão abaixo para revelar detalhes complementares com moderação (princípio de simplicidade).
+            </p>
+            {expanded && (
+              <div className="mt-3 rounded-md border border-border bg-[var(--color-card-back)] p-3 text-base text-foreground">
+                Detalhes extras: metadados, histórico ou texto longo que não precisa estar sempre visível.
+              </div>
+            )}
+          </CardContent>
+          <CardFooter>
+            <Button emphasis="tertiary" type="button" onClick={() => setExpanded((e) => !e)}>
+              {expanded ? 'Recolher' : 'Expandir'}
+            </Button>
+          </CardFooter>
+        </Card>
+      )
+    }
+
+    // layout === 'default'
+    return (
+      <Card
+        className="w-[min(100%,380px)] overflow-hidden"
+        hover={hover}
+        disabled={disabled}
+        dragged={dragged}
+        fixedHeight={fixedHeight}
+        contentHeight={contentHeight}
+      >
+        {showMedia && (
+          <CardMedia
+            height={140}
+            className="rounded-none bg-gradient-to-br from-primary/25 via-primary/10 to-muted"
+            aria-label="Mídia de capa"
+            role="img"
+          />
+        )}
+        <CardHeader className={showIcon ? 'flex flex-row items-start gap-1' : undefined}>
+          {showIcon && (
+            <CardHeaderIcon className="rounded-md bg-primary/10 text-primary">
+              <IcDoc />
+            </CardHeaderIcon>
+          )}
+          <div className={showIcon ? 'min-w-0 flex-1' : undefined}>
+            <CardTitle>Cartão</CardTitle>
+            <CardDescription>Exemplo no Playground.</CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <p className="text-base text-muted-foreground">Conteúdo principal do cartão.</p>
+        </CardContent>
+        {showFooterButtons && (
+          <CardFooter className="justify-end gap-2">
+            <Button emphasis="tertiary" type="button">Cancelar</Button>
+            <Button emphasis="primary" type="button">Confirmar</Button>
+          </CardFooter>
+        )}
+      </Card>
+    )
+  },
+  argTypes: {
+    layout: {
+      control: 'select',
+      options: ['default', 'frente-verso', 'expansivel'],
+      description: 'Modo de exibição do card no playground',
+      table: { category: 'Playground' },
+    },
+    showIcon: {
+      control: 'boolean',
+      description: 'Exibir ícone no cabeçalho (CardHeaderIcon) — apenas no modo default',
+      table: { category: 'Playground' },
+    },
+    showMedia: {
+      control: 'boolean',
+      description: 'Exibir mídia em sangria no topo (CardMedia) — apenas no modo default',
+      table: { category: 'Playground' },
+    },
+    showFooterButtons: {
+      control: 'boolean',
+      description: 'Exibir botões de ação no rodapé (CardFooter) — apenas no modo default',
+      table: { category: 'Playground' },
+    },
+  },
   args: {
+    layout: 'default',
+    showIcon: false,
+    showMedia: false,
+    showFooterButtons: false,
     hover: false,
     disabled: false,
     dragged: false,
     fixedHeight: false,
   },
-  render: (args) => (
-    <Card {...args} className="w-[min(100%,380px)]">
-      <CardHeader>
-        <CardTitle>Cartão</CardTitle>
-        <CardDescription>Exemplo no Playground.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-base text-muted-foreground">Conteúdo.</p>
-      </CardContent>
-    </Card>
-  ),
 }
 
 export const SimplesEComplexo: Story = {
