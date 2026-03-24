@@ -67,7 +67,7 @@ function DsThemeDecorator({
   return (
     <DesignSystemProvider
       colorScheme={colorScheme}
-      className={cn('min-h-screen w-full bg-background text-foreground')}
+      className={cn('bg-background text-foreground')}
     >
       {children}
     </DesignSystemProvider>
