@@ -2,7 +2,15 @@ import React, { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 import { Button, CircleButton } from '@ds/components'
-import type { ButtonEmphasis, ButtonDensity, ButtonIntent } from '@ds/components'
+import type { ButtonEmphasis, ButtonDensity, ButtonIntent, ButtonProps } from '@ds/components'
+
+type PlaygroundArgs = ButtonProps & {
+  componentType?: 'standard' | 'circular'
+  positioning?: 'none' | 'horizontal' | 'vertical'
+  toggleMode?: boolean
+  showStartIcon?: boolean
+  showEndIcon?: boolean
+}
 
 const BUTTON_DOCS = [
   '## Button (Botão)',
@@ -156,13 +164,133 @@ const IconPaperclip = (
   </svg>
 )
 
-export const Playground: Story = {
+export const Playground: StoryObj<PlaygroundArgs> = {
+  render: function PlaygroundRender({
+    componentType = 'standard',
+    positioning = 'none',
+    toggleMode = false,
+    showStartIcon = false,
+    showEndIcon = false,
+    children,
+    emphasis = 'primary',
+    density = 'medium',
+    intent = 'default',
+    block,
+    loading,
+    disabled,
+    onClick,
+  }: PlaygroundArgs) {
+    const [toggled, setToggled] = useState(false)
+
+    const label = toggleMode
+      ? toggled ? 'Ativo' : 'Inativo'
+      : (typeof children === 'string' ? children : 'Salvar')
+
+    const startIconEl = showStartIcon ? IconDownload : undefined
+    const endIconEl   = showEndIcon   ? IconChevronRight : undefined
+    const handleClick = toggleMode ? () => setToggled(v => !v) : onClick
+
+    if (componentType === 'circular') {
+      return (
+        <CircleButton
+          density={density}
+          intent={intent}
+          loading={loading}
+          disabled={disabled}
+          aria-label={label}
+          onClick={handleClick}
+        >
+          {IconDownload}
+        </CircleButton>
+      )
+    }
+
+    if (positioning === 'horizontal') {
+      return (
+        <div className="flex flex-wrap items-center gap-3">
+          <Button emphasis="tertiary" density={density}>Cancelar</Button>
+          <Button emphasis="secondary" density={density}>Salvar rascunho</Button>
+          <Button
+            emphasis={emphasis} density={density} intent={intent}
+            loading={loading} disabled={disabled}
+            startIcon={startIconEl} endIcon={endIconEl}
+            onClick={handleClick}
+          >
+            {label}
+          </Button>
+        </div>
+      )
+    }
+
+    if (positioning === 'vertical') {
+      return (
+        <div className="flex w-56 flex-col gap-3">
+          <Button emphasis="tertiary" density={density} block>Cancelar</Button>
+          <Button emphasis="secondary" density={density} block>Salvar rascunho</Button>
+          <Button
+            emphasis={emphasis} density={density} intent={intent}
+            block loading={loading} disabled={disabled}
+            startIcon={startIconEl} endIcon={endIconEl}
+            onClick={handleClick}
+          >
+            {label}
+          </Button>
+        </div>
+      )
+    }
+
+    return (
+      <Button
+        emphasis={emphasis} density={density} intent={intent}
+        block={block} loading={loading} disabled={disabled}
+        startIcon={startIconEl} endIcon={endIconEl}
+        onClick={handleClick}
+      >
+        {label}
+      </Button>
+    )
+  },
+  argTypes: {
+    componentType: {
+      control: 'select',
+      options: ['standard', 'circular'],
+      description: 'Tipo: botão padrão ou circular (apenas ícone + aria-label)',
+      table: { category: 'Playground' },
+    },
+    positioning: {
+      control: 'select',
+      options: ['none', 'horizontal', 'vertical'],
+      description: 'Exibir grupo de botões com posicionamento horizontal ou vertical',
+      table: { category: 'Playground' },
+    },
+    toggleMode: {
+      control: 'boolean',
+      description: 'Comportamento toggle — rótulo alterna entre "Ativo" e "Inativo" a cada clique',
+      table: { category: 'Playground' },
+    },
+    showStartIcon: {
+      control: 'boolean',
+      description: 'Exibir ícone no início (startIcon)',
+      table: { category: 'Playground' },
+    },
+    showEndIcon: {
+      control: 'boolean',
+      description: 'Exibir ícone no fim (endIcon)',
+      table: { category: 'Playground' },
+    },
+  },
   args: {
     children: 'Salvar',
     emphasis: 'primary',
     density: 'medium',
     intent: 'default',
+    componentType: 'standard',
+    positioning: 'none',
+    toggleMode: false,
+    showStartIcon: false,
+    showEndIcon: false,
   },
+  parameters: { layout: 'centered' },
 }
 
 export const RotuloObrigatorio: Story = {
