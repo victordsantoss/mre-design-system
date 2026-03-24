@@ -20,7 +20,7 @@ Header de navegação GovBR. Contém logo, assinatura, título, subtítulo, link
 
 const LogoMRE = () => (
   <img
-    src="https://upload.wikimedia.org/wikipedia/commons/6/69/Itamaraty_logo.jpg"
+    src="https://upload.wikimedia.org/wikipedia/commons/7/7b/AssinaturaMREGovBR.png"
     alt="Itamaraty — Ministério das Relações Exteriores"
   />
 )

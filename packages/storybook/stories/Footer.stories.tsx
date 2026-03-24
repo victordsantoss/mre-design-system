@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { Footer, type FooterProps, type FooterCategory, type FooterLogoAlign } from '@ds/components'
+import { Footer, type FooterProps, type FooterCategory, type FooterLogoAlign, type FooterSecondaryLink } from '@ds/components'
 
 /* ------------------------------------------------------------------- meta */
 
@@ -43,14 +43,14 @@ type Story = StoryObj<typeof Footer>
 
 const MRELogo = () => (
   <img
-    src="https://upload.wikimedia.org/wikipedia/commons/6/69/Itamaraty_logo.jpg"
+    src="https://upload.wikimedia.org/wikipedia/commons/7/7b/AssinaturaMREGovBR.png"
     alt="Itamaraty — Ministério das Relações Exteriores"
   />
 )
 
-const SocialIcon = ({ bg, children }: { bg: string; children: React.ReactNode }) => (
+const SecondaryIcon = ({ bg, children }: { bg: string; children: React.ReactNode }) => (
   <span
-    className="flex h-10 w-10 items-center justify-center rounded-full text-white text-sm font-bold"
+    className="flex h-7 w-7 items-center justify-center rounded-full text-white text-xs font-bold"
     style={{ backgroundColor: bg }}
     aria-hidden="true"
   >
@@ -58,16 +58,16 @@ const SocialIcon = ({ bg, children }: { bg: string; children: React.ReactNode })
   </span>
 )
 
-const SOCIAL_LINKS = [
-  { href: '#', label: 'Twitter / X', icon: <SocialIcon bg="#1DA1F2">𝕏</SocialIcon> },
-  { href: '#', label: 'YouTube', icon: <SocialIcon bg="#FF0000">▶</SocialIcon> },
-  { href: '#', label: 'Instagram', icon: <SocialIcon bg="#E1306C">Ig</SocialIcon> },
-  { href: '#', label: 'Facebook', icon: <SocialIcon bg="#1877F2">f</SocialIcon> },
+const SECONDARY_LINKS: FooterSecondaryLink[] = [
+  { href: '#', label: 'Twitter / X', icon: <SecondaryIcon bg="#1DA1F2">𝕏</SecondaryIcon> },
+  { href: '#', label: 'YouTube', icon: <SecondaryIcon bg="#FF0000">▶</SecondaryIcon> },
+  { href: '#', label: 'Instagram', icon: <SecondaryIcon bg="#E1306C">Ig</SecondaryIcon> },
+  { href: '#', label: 'Facebook', icon: <SecondaryIcon bg="#1877F2">f</SecondaryIcon> },
 ]
 
 const SIGNATURES = (
   <img
-    src="https://upload.wikimedia.org/wikipedia/commons/6/69/Itamaraty_logo.jpg"
+    src="https://upload.wikimedia.org/wikipedia/commons/7/7b/AssinaturaMREGovBR.png"
     alt="Itamaraty"
     className="h-10 opacity-80"
   />
@@ -146,8 +146,8 @@ export const Playground: Story = {
       {...args}
       logo={<MRELogo />}
       categories={MRE_CATEGORIES}
-      socialTitle="REDES SOCIAIS"
-      socialLinks={SOCIAL_LINKS}
+      secondaryTitle="CONTEÚDO SECUNDÁRIO"
+      secondaryLinks={SECONDARY_LINKS}
       signatures={SIGNATURES}
       legalText={LEGAL_TEXT}
     />
@@ -260,40 +260,8 @@ export const MapaDoSite12Listas: Story = {
           ],
         },
       ]}
-      socialTitle="REDES SOCIAIS"
-      socialLinks={SOCIAL_LINKS}
-      signatures={SIGNATURES}
-      legalText={LEGAL_TEXT}
-    />
-  ),
-}
-
-/**
- * **Com Redes Sociais + Assinaturas** — Área secundária completa.
- */
-export const ComSecundario: Story = {
-  render: () => (
-    <Footer
-      logo={<MRELogo />}
-      socialTitle="REDES SOCIAIS"
-      socialLinks={SOCIAL_LINKS}
-      signatures={SIGNATURES}
-      legalText={LEGAL_TEXT}
-    />
-  ),
-}
-
-/**
- * **Tema Claro (inverted)** — Fundo branco, links na cor primary.
- */
-export const TemaClaro: Story = {
-  render: () => (
-    <Footer
-      inverted
-      logo={<MRELogo />}
-      categories={MRE_CATEGORIES}
-      socialTitle="REDES SOCIAIS"
-      socialLinks={SOCIAL_LINKS}
+      secondaryTitle="CONTEÚDO SECUNDÁRIO"
+      secondaryLinks={SECONDARY_LINKS}
       signatures={SIGNATURES}
       legalText={LEGAL_TEXT}
     />
@@ -316,32 +284,6 @@ export const AlinhamentosLogo: Story = {
       ))}
     </div>
   ),
-}
-
-/**
- * **Acordeão Mobile** — Viewport de 375px para demonstrar colapso exclusivo.
- * Uma categoria por vez; as demais fecham automaticamente.
- */
-export const AcordeoMobile: Story = {
-  render: () => (
-    <Footer
-      logo={<MRELogo />}
-      categories={MRE_CATEGORIES}
-      legalText={LEGAL_TEXT}
-    />
-  ),
-  parameters: {
-    viewport: {
-      defaultViewport: 'mobile2',
-    },
-    docs: {
-      description: {
-        story:
-          'Viewport de 414px (mobile2) para demonstrar o acordeão exclusivo. ' +
-          'Em telas ≥1024px as categorias são exibidas lado a lado.',
-      },
-    },
-  },
 }
 
 /**

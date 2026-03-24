@@ -37,7 +37,7 @@ export interface FooterCategory {
   links: Array<{ label: string; href: string }>
 }
 
-export interface FooterSocialLink {
+export interface FooterSecondaryLink {
   icon: React.ReactNode
   /** Texto acessível do link */
   label: string
@@ -61,10 +61,10 @@ export interface FooterProps {
    * Mobile/tablet < lg: acordeão exclusivo (uma categoria por vez).
    */
   categories?: FooterCategory[]
-  /** Título da seção de redes sociais — área 6 (padrão: "REDES SOCIAIS") */
-  socialTitle?: string
-  /** Links de redes sociais — área 7 */
-  socialLinks?: FooterSocialLink[]
+  /** Título da seção de conteúdo secundário — área 6 (padrão: "CONTEÚDO SECUNDÁRIO") */
+  secondaryTitle?: string
+  /** Links de conteúdo secundário — área 7 */
+  secondaryLinks?: FooterSecondaryLink[]
   /** Logos de assinatura — área 8, lado direito da seção secundária */
   signatures?: React.ReactNode
   /** Texto legal — área 9-11, centralizado na barra inferior. Aceita JSX. */
@@ -100,8 +100,8 @@ export const Footer = React.forwardRef<HTMLElement, FooterProps>(
       logo,
       logoAlign = 'left',
       categories,
-      socialTitle = 'REDES SOCIAIS',
-      socialLinks,
+      secondaryTitle = 'CONTEÚDO SECUNDÁRIO',
+      secondaryLinks,
       signatures,
       legalText,
       noDivider = false,
@@ -115,7 +115,7 @@ export const Footer = React.forwardRef<HTMLElement, FooterProps>(
       setOpenCategory((prev) => (prev === title ? null : title))
 
     const hasSitemap = Boolean(categories?.length)
-    const hasSocial = Boolean(socialLinks?.length || signatures)
+    const hasSocial = Boolean(secondaryLinks?.length || signatures)
     const hasLegal = Boolean(legalText)
 
     /* Grupos de até MAX_COLS colunas para o layout desktop */
@@ -257,22 +257,22 @@ export const Footer = React.forwardRef<HTMLElement, FooterProps>(
             </div>
           )}
 
-          {/* ── Áreas 6-8 — Redes sociais + assinaturas ──────────────── */}
+          {/* ── Áreas 6-8 — Conteúdo secundário + assinaturas ────────── */}
           {hasSocial && (
             <div className="flex flex-wrap items-end justify-between gap-6 pb-12">
-              {socialLinks && socialLinks.length > 0 && (
+              {secondaryLinks && secondaryLinks.length > 0 && (
                 <div>
                   <p className="mb-3 text-sm font-extrabold uppercase tracking-wider">
-                    {socialTitle}
+                    {secondaryTitle}
                   </p>
                   <div className="flex items-center gap-4">
-                    {socialLinks.map((link) => (
+                    {secondaryLinks.map((link) => (
                       <a
                         key={link.href}
                         href={link.href}
                         aria-label={link.label}
                         className={cn(
-                          'flex h-10 w-10 items-center justify-center rounded-full',
+                          'flex h-7 w-7 items-center justify-center rounded-full',
                           'transition-opacity hover:opacity-80',
                           'focus-visible:outline-none focus-visible:ring-[3px]',
                           'focus-visible:ring-ring focus-visible:ring-offset-[4px]',

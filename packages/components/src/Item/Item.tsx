@@ -55,6 +55,14 @@ export interface ItemProps {
   /** Callback de clique — renderiza como <button> quando não há href */
   onClick?: React.MouseEventHandler<HTMLElement>
   className?: string
+  /** Inline styles forwarded to the root element (permite override de padding, etc.) */
+  style?: React.CSSProperties
+  /** Role ARIA forwarded to the root element */
+  role?: string
+  /** Indica o item atual (ex: 'page' no contexto de árvore de navegação) */
+  'aria-current'?: React.AriaAttributes['aria-current']
+  /** Indica que o item possui um popup/submenu */
+  'aria-haspopup'?: React.AriaAttributes['aria-haspopup']
   /** Sobrescreve o elemento raiz */
   as?: 'div' | 'button' | 'a'
 }
@@ -83,6 +91,10 @@ export const Item = React.forwardRef<HTMLElement, ItemProps>(
       href,
       onClick,
       className,
+      style,
+      role,
+      'aria-current': ariaCurrent,
+      'aria-haspopup': ariaHaspopup,
       as,
     },
     ref,
@@ -120,8 +132,11 @@ export const Item = React.forwardRef<HTMLElement, ItemProps>(
 
     const sharedProps = {
       className: baseClass,
+      style,
+      role,
       'aria-disabled': disabled || undefined,
       'aria-selected': selected || undefined,
+      'aria-haspopup': ariaHaspopup,
     } as React.HTMLAttributes<HTMLElement>
 
     /* Conteúdo interno: itens com onToggle ganham chevron automático */
@@ -153,7 +168,7 @@ export const Item = React.forwardRef<HTMLElement, ItemProps>(
             ref={ref as React.Ref<HTMLAnchorElement>}
             href={href}
             onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
-            aria-current={active ? 'true' : undefined}
+            aria-current={ariaCurrent ?? (active ? 'page' : undefined)}
             {...(sharedProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
           >
             {inner}

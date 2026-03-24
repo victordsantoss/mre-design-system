@@ -178,6 +178,6 @@ export {
   type FooterProps,
   type FooterLogoAlign,
   type FooterCategory,
-  type FooterSocialLink,
+  type FooterSecondaryLink,
 } from './Footer'
 export { cn } from './utils/cn'

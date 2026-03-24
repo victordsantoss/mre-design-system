@@ -1,23 +1,36 @@
 'use client'
 /**
  * Menu — Padrão Digital de Governo (GovBR)
- * Navegação principal: offCanvas (padrão), push e contextual (bottom sheet).
- * API alinhada ao pacote MUI @itamaraty-ds/components.
  *
- * Conformidade GovBR DS (@govbr-ds/core):
- * - role="dialog" + aria-modal + aria-labelledby no painel
- * - role="tree" nas listas, role="treeitem" nos itens, role="group" em submenus
- * - aria-haspopup, aria-expanded, aria-hidden em ícones decorativos
- * - Navegação por teclado: Arrow Up/Down/Left/Right, Home, End
- * - Focus ring 3px/4px conforme padrão GovBR
- * - Chevron-down rotacionando 180° ao expandir
- * - Background de submenu: gray-2 (#F8F8F8 / --color-muted)
- * - Restauração de foco ao fechar o menu
+ * Anatomia (GovBR DS):
+ *  1  Ícone de acionamento   — Button (externo ao componente)
+ *  2  Superfície scrim       — condicional (offCanvas / contextual)
+ *  3  Cabeçalho do menu      — logo + título + botão Fechar
+ *  4  Botão Fechar           — Button
+ *  5  Item de 1º nível       — Item (Drop Menu → accordion)
+ *  6  Item de 2º nível       — Item (Side Menu → drill-down / link)
+ *  7  Ícone Expandir/Retrair — chevron auto via Item.onToggle (Drop Menu)
+ *                              angle-right / angle-left (Side Menu)
+ *  8  Ícone representativo   — slot icon em MenuItemDef
+ *  9  Ícone Acessar Subitens — angle-right nos itens Side Menu
+ * 10  Divider               — Divider
+ * 11  Painel do menu         — MenuDrawerSurface (obrigatório)
+ * 12  Rodapé do menu         — slot footer (React.ReactNode)
+ *
+ * Distinção Drop Menu × Side Menu (conforme br-menu reference):
+ * - Drop Menu  → filho imediato de .menu-folder (level === 0):
+ *   accordion, chevron-down rotaciona 180°
+ * - Side Menu  → nível > 0 com filhos:
+ *   drill-down, angle-right → painel substitui a lista, angle-left no botão voltar
  */
 import * as React from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '../utils/cn'
+import { Item } from '../Item'
+import { Divider } from '../Divider'
 import { MenuDrawerSurface } from './MenuDrawerSurface'
+
+/* ------------------------------------------------------------------ tipos */
 
 export type MenuDensity = 'small' | 'medium' | 'large'
 export type MenuVariant = 'offCanvas' | 'push' | 'contextual'
@@ -34,12 +47,14 @@ export interface MenuItemDef {
   danger?: boolean
   shortcut?: string
   badge?: string | number
+  /** Adiciona Divider após este item */
   divider?: boolean
   items?: MenuItemDef[]
 }
 
 export interface MenuFolder {
   id?: string
+  /** Rótulo fixo do agrupamento (agrupamento por rótulos — sem accordion) */
   title?: string
   items: MenuItemDef[]
 }
@@ -52,6 +67,10 @@ export interface MenuProps {
   title?: string
   header?: MenuHeaderMode
   folders?: MenuFolder[]
+  /**
+   * Rodapé do menu — área 12.
+   * Use `MenuLogos`, `MenuLinks`, `MenuSocial` e `MenuInfo` para compor.
+   */
   footer?: React.ReactNode
   density?: MenuDensity
   activeId?: string
@@ -60,6 +79,8 @@ export interface MenuProps {
   children?: React.ReactNode
 }
 
+/* ------------------------------------------------ constantes */
+
 const DENSITY_PY: Record<MenuDensity, string> = {
   small: 'py-2',
   medium: 'py-4',
@@ -67,6 +88,10 @@ const DENSITY_PY: Record<MenuDensity, string> = {
 }
 
 const MENU_WIDTH = 300
+const INDENT_BASE = 16    // px — nível 0
+const INDENT_STEP = 24    // px — incremento por nível
+
+/* ------------------------------------------------ helpers de header */
 
 function resolveMenuHeaderBar(
   header: MenuHeaderMode | undefined,
@@ -87,6 +112,74 @@ function resolveMenuHeaderBar(
   return { showClose: true, logo: hasLogo ? logo : undefined, title: hasTitle ? title!.trim() : undefined }
 }
 
+/* ------------------------------------------------ ícones internos */
+
+function AngleRight() {
+  return (
+    <svg className="h-4 w-4 shrink-0 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+  )
+}
+
+function AngleLeft() {
+  return (
+    <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  )
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  )
+}
+
+/* ------------------------------------------------ SideMenuBackButton */
+
+/**
+ * Botão Voltar do Side Menu (drill-down).
+ * Renderizado no topo do painel quando há drill-down ativo.
+ * Reproduz `.side-menu.active > .menu-item` do GovBR DS (flex-row-reverse equivalente).
+ */
+function SideMenuBackButton({
+  item,
+  density,
+  onBack,
+}: {
+  item: MenuItemDef
+  density: MenuDensity
+  onBack: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onBack}
+      className={cn(
+        'flex w-full items-center gap-3 border-b border-border bg-background px-4 text-left font-semibold text-primary',
+        DENSITY_PY[density],
+        'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
+        'hover:bg-primary/[0.08]',
+      )}
+    >
+      {/* ← angle-left — lado esquerdo (row-reverse do GovBR DS) */}
+      <AngleLeft />
+      {item.icon && (
+        <span className="flex w-8 shrink-0 items-center justify-center text-primary" aria-hidden="true">
+          {item.icon}
+        </span>
+      )}
+      <span className="flex-1 text-base">{item.label}</span>
+    </button>
+  )
+}
+
+/* ------------------------------------------------ MenuItemInternal */
+
 interface MenuItemInternalProps {
   item: MenuItemDef
   density: MenuDensity
@@ -94,7 +187,8 @@ interface MenuItemInternalProps {
   activeId?: string
   onItemClick?: (item: MenuItemDef) => void
   expandedIds: Set<string>
-  onToggle: (id: string) => void
+  onDropMenuToggle: (id: string) => void
+  onSideMenuNavigate?: (item: MenuItemDef) => void
   parentId?: string
 }
 
@@ -105,27 +199,41 @@ function MenuItemInternal({
   activeId,
   onItemClick,
   expandedIds,
-  onToggle,
+  onDropMenuToggle,
+  onSideMenuNavigate,
   parentId,
 }: MenuItemInternalProps) {
   const hasChildren = Boolean(item.items?.length)
+  const isDropMenu = level === 0 && hasChildren   // Drop Menu: accordion
+  const isSideMenu = level > 0 && hasChildren     // Side Menu: drill-down
   const expanded = expandedIds.has(item.id)
   const active = activeId != null && activeId !== '' ? item.id === activeId : Boolean(item.active)
-  const py = DENSITY_PY[density]
-  const padLeft = 16 - 4 + level * 24
+
+  const padLeft = INDENT_BASE + level * INDENT_STEP
 
   const handleActivate = () => {
-    if (hasChildren) onToggle(item.id)
-    else {
+    if (isDropMenu) {
+      onDropMenuToggle(item.id)
+    } else if (isSideMenu) {
+      onSideMenuNavigate?.(item)
+    } else {
       item.onClick?.(item)
       onItemClick?.(item)
     }
   }
 
-  const content = (
-    <>
+  /*
+   * Conteúdo interno:
+   * - Ícone representativo (8) — w-8 shrink-0
+   * - Rótulo — flex-1
+   * - Atalho / badge — shrink-0
+   * - Ícone Side Menu (9) — angle-right, apenas quando isSideMenu
+   *   (o chevron do Drop Menu é injetado automaticamente pelo Item via onToggle)
+   */
+  const itemContent = (
+    <span className="flex min-w-0 flex-1 items-center gap-2">
       {item.icon ? (
-        <span className="flex w-10 shrink-0 justify-center text-inherit" aria-hidden="true">
+        <span className="flex w-8 shrink-0 items-center justify-center text-inherit" aria-hidden="true">
           {item.icon}
         </span>
       ) : null}
@@ -142,70 +250,53 @@ function MenuItemInternal({
           {item.badge}
         </span>
       ) : null}
-      {hasChildren ? (
-        <svg
-          className={cn(
-            'h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300',
-            expanded && 'rotate-180',
-          )}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          aria-hidden="true"
-        >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      ) : null}
-    </>
+      {/* Ícone Acessar Subitens (9) — apenas em Side Menu */}
+      {isSideMenu ? <AngleRight /> : null}
+    </span>
   )
-
-  const itemClass = cn(
-    'flex w-full items-center gap-2 border-l-4 border-transparent text-left font-body transition-colors',
-    py,
-    'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
-    active && 'border-primary bg-primary/[0.06] font-semibold text-primary',
-    !active && (item.danger ? 'text-destructive' : 'text-foreground'),
-    item.disabled && 'pointer-events-none opacity-45',
-  )
-
-  const itemStyle = { paddingLeft: padLeft, paddingRight: 16 }
 
   return (
-    <li className={cn('block w-full', item.divider && 'border-b border-border')} role="none">
-      {item.href && !hasChildren ? (
-        <a
-          href={item.href}
-          className={itemClass}
-          style={itemStyle}
-          role="treeitem"
-          data-item-id={item.id}
-          data-parent-id={parentId}
-          aria-current={active ? 'page' : undefined}
-        >
-          {content}
-        </a>
-      ) : (
-        <button
-          type="button"
-          className={itemClass}
-          style={itemStyle}
-          disabled={item.disabled}
-          role="treeitem"
-          data-item-id={item.id}
-          data-has-children={hasChildren ? 'true' : undefined}
-          data-parent-id={parentId}
-          aria-expanded={hasChildren ? expanded : undefined}
-          aria-haspopup={hasChildren ? 'true' : undefined}
-          aria-current={active ? 'page' : undefined}
-          onClick={handleActivate}
-        >
-          {content}
-        </button>
-      )}
+    <li
+      className="block w-full"
+      role="none"
+      data-item-id={item.id}
+      data-has-children={hasChildren ? 'true' : undefined}
+      data-parent-id={parentId}
+    >
+      <Item
+        href={!hasChildren ? item.href : undefined}
+        /*
+         * Drop Menu: apenas onToggle — Item já chama onDropMenuToggle internamente.
+         * Passar onClick também causaria toggle duplo (abrir + fechar imediato).
+         * Side Menu / leaf: onClick = handleActivate.
+         */
+        onClick={!isDropMenu ? handleActivate : undefined}
+        onToggle={isDropMenu ? () => onDropMenuToggle(item.id) : undefined}
+        expanded={isDropMenu ? expanded : undefined}
+        active={active}
+        disabled={item.disabled}
+        density={density}
+        role="treeitem"
+        aria-current={active ? 'page' : undefined}
+        aria-haspopup={hasChildren ? 'true' : undefined}
+        className={cn(
+          'border-l-4',
+          active ? 'border-primary' : 'border-transparent',
+          item.danger && !active && '!text-destructive',
+          /* Item de 2º nível+: fundo muted conforme spec GovBR */
+          level > 0 && 'bg-muted',
+        )}
+        style={{ paddingLeft: padLeft, paddingRight: INDENT_BASE }}
+      >
+        {itemContent}
+      </Item>
 
-      {hasChildren && expanded && (
-        <ul className="m-0 list-none bg-muted p-0" role="group">
+      {/* Divider após item (área 10) */}
+      {item.divider && <Divider className="my-0" />}
+
+      {/* Drop Menu: filhos expandidos inline (accordion) */}
+      {isDropMenu && expanded && (
+        <ul className="m-0 list-none p-0" role="group">
           {item.items!.map((sub) => (
             <MenuItemInternal
               key={sub.id}
@@ -215,7 +306,8 @@ function MenuItemInternal({
               activeId={activeId}
               onItemClick={onItemClick}
               expandedIds={expandedIds}
-              onToggle={onToggle}
+              onDropMenuToggle={onDropMenuToggle}
+              onSideMenuNavigate={onSideMenuNavigate}
               parentId={item.id}
             />
           ))}
@@ -224,6 +316,8 @@ function MenuItemInternal({
     </li>
   )
 }
+
+/* --------------------------------------------------------------- Menu */
 
 export function Menu({
   open,
@@ -245,11 +339,20 @@ export function Menu({
   const prevFocusRef = React.useRef<Element | null>(null)
   const titleId = React.useId()
 
+  /** Ids dos Drop Menus expandidos (accordion, nível 0) */
   const [expandedIds, setExpandedIds] = React.useState<Set<string>>(new Set())
+  /**
+   * Pilha de navegação Side Menu (drill-down).
+   * Cada item empilhado representa um nível aprofundado.
+   */
+  const [sideMenuPath, setSideMenuPath] = React.useState<MenuItemDef[]>([])
 
   const headerBar = resolveMenuHeaderBar(header, variant, logo, title)
 
-  const toggleExpanded = React.useCallback((id: string) => {
+  /** Item mais profundo da pilha (painel atual do Side Menu) */
+  const sideMenuCurrent = sideMenuPath[sideMenuPath.length - 1] ?? null
+
+  const toggleDropMenu = React.useCallback((id: string) => {
     setExpandedIds((prev) => {
       const next = new Set(prev)
       if (next.has(id)) next.delete(id)
@@ -258,38 +361,59 @@ export function Menu({
     })
   }, [])
 
-  // Fecha o menu com Escape
+  /** Aprofunda um nível no Side Menu */
+  const navigateSideMenu = React.useCallback((item: MenuItemDef) => {
+    setSideMenuPath((prev) => [...prev, item])
+  }, [])
+
+  /** Volta um nível no Side Menu */
+  const backSideMenu = React.useCallback(() => {
+    setSideMenuPath((prev) => prev.slice(0, -1))
+  }, [])
+
+  /* Fecha com Escape */
   React.useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        if (sideMenuPath.length > 0) backSideMenu()
+        else onClose()
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  }, [open, onClose, sideMenuPath, backSideMenu])
 
-  // Foco: captura elemento ativo antes de abrir; restaura ao fechar
+  /* Foco: captura antes de abrir; restaura ao fechar + reset de estado */
   React.useEffect(() => {
     if (open) {
       prevFocusRef.current = document.activeElement
       closeRef.current?.focus()
     } else {
       setExpandedIds(new Set())
+      setSideMenuPath([])
       ;(prevFocusRef.current as HTMLElement | null)?.focus()
     }
   }, [open])
 
-  // Navegação por teclado no menu (Arrow keys, Home, End)
+  /* Navegação por teclado (Arrow keys, Home, End, Backspace para Side Menu) */
   const handleNavKeyDown = React.useCallback(
     (e: React.KeyboardEvent) => {
       const nav = navRef.current
       if (!nav) return
 
+      /* Backspace no Side Menu = voltar */
+      if (e.key === 'Backspace' && sideMenuPath.length > 0) {
+        e.preventDefault()
+        backSideMenu()
+        return
+      }
+
       const items = Array.from(
-        nav.querySelectorAll<HTMLElement>('[role="treeitem"]:not([disabled])'),
+        nav.querySelectorAll<HTMLElement>('[role="treeitem"]:not([disabled]):not([aria-disabled="true"])'),
       )
-      const focused = document.activeElement
-      const idx = items.indexOf(focused as HTMLElement)
+      const focused = document.activeElement as HTMLElement
+      const idx = items.indexOf(focused)
 
       switch (e.key) {
         case 'ArrowDown':
@@ -313,43 +437,41 @@ export function Menu({
           break
 
         case 'ArrowRight': {
-          const el = focused as HTMLElement
-          const itemId = el.dataset.itemId
-          if (itemId && el.dataset.hasChildren === 'true' && !expandedIds.has(itemId)) {
+          const li = focused.closest('li[data-item-id]') as HTMLElement | null
+          const itemId = li?.dataset.itemId
+          if (itemId && li?.dataset.hasChildren === 'true' && !expandedIds.has(itemId)) {
             e.preventDefault()
-            toggleExpanded(itemId)
-            // Foca o primeiro filho após expandir
+            toggleDropMenu(itemId)
             requestAnimationFrame(() => {
-              const firstChild = nav.querySelector<HTMLElement>(
-                `[data-parent-id="${itemId}"]`,
-              )
-              firstChild?.focus()
+              nav
+                .querySelector<HTMLElement>(`li[data-parent-id="${itemId}"] [role="treeitem"]`)
+                ?.focus()
             })
           }
           break
         }
 
         case 'ArrowLeft': {
-          const el = focused as HTMLElement
-          const itemId = el.dataset.itemId
-          const parentItemId = el.dataset.parentId
+          const li = focused.closest('li[data-item-id]') as HTMLElement | null
+          const itemId = li?.dataset.itemId
+          const parentItemId = li?.dataset.parentId
           if (itemId && expandedIds.has(itemId)) {
-            // Colapsa o item expandido atual
             e.preventDefault()
-            toggleExpanded(itemId)
+            toggleDropMenu(itemId)
           } else if (parentItemId) {
-            // Volta ao item pai
             e.preventDefault()
-            const parentEl = nav.querySelector<HTMLElement>(
-              `[data-item-id="${parentItemId}"]`,
-            )
-            parentEl?.focus()
+            nav
+              .querySelector<HTMLElement>(`li[data-item-id="${parentItemId}"] [role="treeitem"]`)
+              ?.focus()
+          } else if (sideMenuPath.length > 0) {
+            e.preventDefault()
+            backSideMenu()
           }
           break
         }
       }
     },
-    [expandedIds, toggleExpanded],
+    [expandedIds, toggleDropMenu, sideMenuPath, backSideMenu],
   )
 
   if (!open || typeof document === 'undefined') return null
@@ -368,13 +490,13 @@ export function Menu({
       aria-modal="true"
       aria-labelledby={titleId}
     >
-      {/* Título acessível: visível no header ou sr-only quando não há header */}
       {!headerBar && (
         <span id={titleId} className="sr-only">
           {title ?? 'Menu'}
         </span>
       )}
 
+      {/* ─── Área 3 — Cabeçalho do menu ─── */}
       {headerBar ? (
         <div className="flex items-start justify-between gap-4 border-b border-border px-4 py-4">
           <div className="min-w-0 flex-1">
@@ -389,6 +511,7 @@ export function Menu({
               </span>
             )}
           </div>
+          {/* ─── Área 4 — Botão fechar ─── */}
           {headerBar.showClose ? (
             <button
               ref={closeRef}
@@ -397,66 +520,103 @@ export function Menu({
               onClick={onClose}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]"
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                aria-hidden="true"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
+              <CloseIcon />
             </button>
           ) : null}
         </div>
       ) : null}
 
+      {/* ─── Áreas 5-10 — Navegação ─── */}
       <nav
         ref={navRef}
         className="flex min-h-0 flex-1 flex-col overflow-y-auto px-0 py-2"
         aria-label="Menu principal"
         onKeyDown={handleNavKeyDown}
       >
-        {folders.map((folder, fi) => (
-          <div
-            key={folder.id ?? folder.title ?? `folder-${fi}`}
-            className="border-b border-border last:border-b-0"
-          >
-            {folder.title ? (
-              <p
-                className="px-4 pb-1 pt-3 font-heading text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-                aria-hidden="true"
-              >
-                {folder.title}
-              </p>
-            ) : null}
+        {sideMenuCurrent ? (
+          /*
+           * Modo drill-down (Side Menu ativo):
+           * Reproduz `.side-menu.active` do GovBR DS —
+           * botão voltar no topo + filhos do item ativo.
+           */
+          <>
+            <SideMenuBackButton
+              item={sideMenuCurrent}
+              density={density}
+              onBack={backSideMenu}
+            />
             <ul
               className="m-0 list-none p-0"
-              role="tree"
-              aria-label={folder.title ?? 'Menu'}
+              role="group"
+              aria-label={sideMenuCurrent.label}
             >
-              {folder.items.map((item) => (
+              {sideMenuCurrent.items!.map((item) => (
                 <MenuItemInternal
                   key={item.id}
                   item={item}
                   density={density}
+                  level={0}
                   activeId={activeId}
-                  expandedIds={expandedIds}
-                  onToggle={toggleExpanded}
                   onItemClick={(it) => {
                     onItemClick?.(it)
                     if (!it.items?.length) onClose()
                   }}
+                  expandedIds={expandedIds}
+                  onDropMenuToggle={toggleDropMenu}
+                  onSideMenuNavigate={navigateSideMenu}
                 />
               ))}
             </ul>
-          </div>
-        ))}
+          </>
+        ) : (
+          /*
+           * Modo normal: pastas com Drop Menu (accordion) e
+           * dividers entre agrupamentos.
+           */
+          folders.map((folder, fi) => (
+            <React.Fragment key={folder.id ?? folder.title ?? `folder-${fi}`}>
+              {fi > 0 && <Divider className="my-0" />}
+
+              {folder.title ? (
+                <p
+                  className={cn(
+                    'px-4 pb-1 font-heading text-xs font-semibold uppercase tracking-wide text-muted-foreground',
+                    fi > 0 ? 'pt-3' : 'pt-2',
+                  )}
+                  aria-hidden="true"
+                >
+                  {folder.title}
+                </p>
+              ) : null}
+
+              <ul
+                className="m-0 list-none p-0"
+                role="tree"
+                aria-label={folder.title ?? 'Menu'}
+              >
+                {folder.items.map((item) => (
+                  <MenuItemInternal
+                    key={item.id}
+                    item={item}
+                    density={density}
+                    activeId={activeId}
+                    expandedIds={expandedIds}
+                    onDropMenuToggle={toggleDropMenu}
+                    onSideMenuNavigate={navigateSideMenu}
+                    onItemClick={(it) => {
+                      onItemClick?.(it)
+                      if (!it.items?.length) onClose()
+                    }}
+                  />
+                ))}
+              </ul>
+            </React.Fragment>
+          ))
+        )}
         {children}
       </nav>
 
+      {/* ─── Área 12 — Rodapé do menu ─── */}
       {footer ? (
         <div className="mt-auto border-t border-border px-4 py-4">{footer}</div>
       ) : null}
@@ -465,6 +625,7 @@ export function Menu({
 
   return createPortal(
     <>
+      {/* ─── Área 2 — Superfície scrim ─── */}
       {(variant === 'offCanvas' || variant === 'contextual') && (
         <button
           type="button"
