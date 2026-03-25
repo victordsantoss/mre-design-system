@@ -10,6 +10,7 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cn } from '../utils/cn'
+import { Typography } from '../Typography/Typography'
 
 export type ButtonEmphasis = 'primary' | 'secondary' | 'tertiary'
 export type ButtonDensity = 'small' | 'medium' | 'large'
@@ -255,7 +256,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ) : (
           <>
             {startIcon}
-            {children}
+            {asChild ? children : (
+              <Typography variant="button" as="span" color="inherit">
+                {children}
+              </Typography>
+            )}
             {endIcon}
           </>
         )}

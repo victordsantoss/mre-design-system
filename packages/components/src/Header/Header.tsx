@@ -16,6 +16,10 @@
  */
 import * as React from 'react'
 import { cn } from '../utils/cn'
+import { Input } from '../Input/Input'
+import { CircleButton } from '../Button/Button'
+import { Typography } from '../Typography/Typography'
+import { Divider } from '../Divider/Divider'
 
 /* ------------------------------------------------------------------ tipos */
 
@@ -112,46 +116,12 @@ function IconSearch() {
   )
 }
 
-function IconClose({ size = 'sm' }: { size?: 'sm' | 'md' }) {
+function IconClose() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      className={size === 'md' ? 'h-5 w-5' : 'h-4 w-4'}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
       <line x1="18" y1="6" x2="6" y2="18" />
       <line x1="6" y1="6" x2="18" y2="18" />
     </svg>
-  )
-}
-
-/* -------------------------------------------- componente HeaderIconButton */
-
-interface HeaderIconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  label: string
-  size?: 'sm' | 'md'
-}
-
-function HeaderIconButton({ label, size = 'sm', className, children, ...rest }: HeaderIconButtonProps) {
-  const dim = size === 'md' ? 'h-9 w-9' : 'h-8 w-8'
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      className={cn(
-        'flex shrink-0 items-center justify-center rounded-full text-primary',
-        'hover:bg-primary/10',
-        'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
-        dim,
-        className,
-      )}
-      {...rest}
-    >
-      {children}
-    </button>
   )
 }
 
@@ -218,24 +188,10 @@ export function Header({
   const hasFunctions = Boolean(functionItems?.length)
   const hasTop = !isCompact && (logo || sign || hasLinks || hasFunctions || signIn || avatar)
 
-  /* -------------------- tipografia do título (responsiva + modo) */
-  const titleClass = cn(
-    'font-heading uppercase text-foreground line-clamp-2 font-normal',
-    isCompact
-      ? 'text-base sm:text-up-01 lg:text-up-02'
-      : 'text-base sm:text-up-02 lg:text-up-03',
-  )
-
-  const subtitleClass = cn(
-    'font-medium text-muted-foreground mt-[4px]',
-    'hidden sm:block',        // oculto em mobile (4 cols)
-    'text-down-01 lg:text-base',
-  )
-
   /* Logo: tamanho varia por modo */
   const logoClass = isCompact
-    ? '[&_img]:h-4 [&_svg]:h-4 sm:[&_img]:h-6 sm:[&_svg]:h-6'         // small (16/24px)
-    : '[&_img]:h-10 [&_svg]:h-10 sm:[&_img]:h-6 sm:[&_svg]:h-6 lg:[&_img]:h-10 lg:[&_svg]:h-10' // large no desktop, medium no tablet
+    ? '[&_img]:h-4 [&_svg]:h-4 sm:[&_img]:h-6 sm:[&_svg]:h-6'
+    : '[&_img]:h-10 [&_svg]:h-10 sm:[&_img]:h-6 sm:[&_svg]:h-6 lg:[&_img]:h-10 lg:[&_svg]:h-10'
 
   const densityClass = isCompact ? DENSITY_PY.small : DENSITY_PY[density]
 
@@ -257,24 +213,24 @@ export function Header({
         {search && searchOpen && (
           <div className="absolute inset-0 z-10 flex items-center gap-3 bg-background px-4 lg:hidden" role="search">
             <form className="flex flex-1 items-center" onSubmit={handleSearchSubmit} aria-label="Busca">
-              <input
+              <Input
                 ref={searchInputRef}
                 type="search"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 placeholder={searchPlaceholder}
                 aria-label="Campo de busca"
-                className={cn(
-                  'flex-1 rounded-md border-none bg-muted px-4 py-2',
-                  'text-up-01 font-medium placeholder:text-muted-foreground',
-                  'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
-                )}
+                className="w-full"
                 onKeyDown={(e) => e.key === 'Escape' && closeSearch()}
               />
             </form>
-            <HeaderIconButton label="Fechar busca" size="md" onClick={closeSearch}>
-              <IconClose size="md" />
-            </HeaderIconButton>
+            <CircleButton
+              aria-label="Fechar busca"
+              density="small"
+              onClick={closeSearch}
+            >
+              <IconClose />
+            </CircleButton>
           </div>
         )}
 
@@ -291,12 +247,20 @@ export function Header({
                   </span>
                 )}
                 {logo && sign && (
-                  <span className="hidden h-8 w-px bg-border sm:block" aria-hidden="true" />
+                  <Divider
+                    orientation="vertical"
+                    className="hidden sm:block mx-0 h-8"
+                  />
                 )}
                 {sign && (
-                  <span className="hidden text-base font-medium text-muted-foreground sm:block">
+                  <Typography
+                    variant="body2"
+                    color="muted"
+                    weight="medium"
+                    className="hidden sm:block"
+                  >
                     {sign}
-                  </span>
+                  </Typography>
                 )}
               </div>
             )}
@@ -322,15 +286,16 @@ export function Header({
 
             {/* Funcionalidades */}
             {hasFunctions && (
-              <div
-                className="flex items-center gap-1"
-                role="group"
-                aria-label="Funcionalidades"
-              >
+              <div className="flex items-center gap-1" role="group" aria-label="Funcionalidades">
                 {functionItems!.map((fn) => (
-                  <HeaderIconButton key={fn.id} label={fn.label} onClick={fn.onClick}>
+                  <CircleButton
+                    key={fn.id}
+                    aria-label={fn.label}
+                    density="small"
+                    onClick={fn.onClick}
+                  >
                     <span aria-hidden="true">{fn.icon}</span>
-                  </HeaderIconButton>
+                  </CircleButton>
                 ))}
               </div>
             )}
@@ -349,38 +314,71 @@ export function Header({
 
           {/* Botão menu hamburguer */}
           {onMenuClick && (
-            <HeaderIconButton
-              label="Abrir menu principal"
+            <CircleButton
+              aria-label="Abrir menu principal"
+              density="small"
               onClick={onMenuClick}
               className={cn(!isCompact && 'sm:self-start sm:mt-0.5')}
             >
               <IconMenu />
-            </HeaderIconButton>
+            </CircleButton>
           )}
 
           {/* Título + subtítulo */}
           <div className="min-w-0 flex-1">
             {titleHref ? (
-              <a
-                href={titleHref}
-                className={cn(titleClass, 'block no-underline hover:underline')}
-              >
-                {title}
+              <a href={titleHref} className="block no-underline hover:underline">
+                <Typography
+                  variant="h4"
+                  weight="normal"
+                  className={cn(
+                    'uppercase line-clamp-2 text-foreground',
+                    'text-base sm:text-up-02 lg:text-up-03',
+                    isCompact && 'sm:text-up-01 lg:text-up-02',
+                  )}
+                  style={{ fontSize: undefined }}
+                >
+                  {title}
+                </Typography>
               </a>
             ) : (
-              <span className={titleClass}>{title}</span>
+              <Typography
+                variant="h4"
+                weight="normal"
+                className={cn(
+                  'uppercase line-clamp-2 text-foreground',
+                  'text-base sm:text-up-02 lg:text-up-03',
+                  isCompact && 'sm:text-up-01 lg:text-up-02',
+                )}
+                style={{ fontSize: undefined }}
+              >
+                {title}
+              </Typography>
             )}
 
             {subtitle && !isCompact && (
               subtitleHref ? (
-                <a
-                  href={subtitleHref}
-                  className={cn(subtitleClass, 'block no-underline hover:underline')}
-                >
-                  {subtitle}
+                <a href={subtitleHref} className="block no-underline hover:underline">
+                  <Typography
+                    variant="body2"
+                    color="muted"
+                    weight="medium"
+                    className="hidden sm:block mt-[4px] text-down-01 lg:text-base"
+                    style={{ fontSize: undefined }}
+                  >
+                    {subtitle}
+                  </Typography>
                 </a>
               ) : (
-                <span className={subtitleClass}>{subtitle}</span>
+                <Typography
+                  variant="body2"
+                  color="muted"
+                  weight="medium"
+                  className="hidden sm:block mt-[4px] text-down-01 lg:text-base"
+                  style={{ fontSize: undefined }}
+                >
+                  {subtitle}
+                </Typography>
               )
             )}
           </div>
@@ -397,9 +395,14 @@ export function Header({
               {hasFunctions && (
                 <div className="flex items-center gap-1" role="group" aria-label="Funcionalidades">
                   {functionItems!.map((fn) => (
-                    <HeaderIconButton key={fn.id} label={fn.label} onClick={fn.onClick}>
+                    <CircleButton
+                      key={fn.id}
+                      aria-label={fn.label}
+                      density="small"
+                      onClick={fn.onClick}
+                    >
                       <span aria-hidden="true">{fn.icon}</span>
-                    </HeaderIconButton>
+                    </CircleButton>
                   ))}
                 </div>
               )}
@@ -414,13 +417,14 @@ export function Header({
 
           {/* Busca mobile / compacto: ícone lupa */}
           {search && (
-            <HeaderIconButton
-              label="Buscar"
+            <CircleButton
+              aria-label="Buscar"
+              density="small"
               onClick={() => setSearchOpen(true)}
               className="lg:hidden"
             >
               <IconSearch />
-            </HeaderIconButton>
+            </CircleButton>
           )}
 
           {/* Busca desktop (standard): input sempre visível */}
@@ -431,31 +435,23 @@ export function Header({
               role="search"
               aria-label="Busca"
             >
-              <div className="relative flex items-center">
-                <input
-                  type="search"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  placeholder={searchPlaceholder}
-                  aria-label="Campo de busca"
-                  className={cn(
-                    'w-[385px] rounded-md border-none bg-muted py-2 pl-4 pr-10',
-                    'text-up-01 font-medium placeholder:text-muted-foreground',
-                    'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
-                  )}
-                />
-                <button
-                  type="submit"
-                  aria-label="Pesquisar"
-                  className={cn(
-                    'absolute right-2 text-primary',
-                    'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
-                    'rounded',
-                  )}
-                >
-                  <IconSearch />
-                </button>
-              </div>
+              <Input
+                type="search"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder={searchPlaceholder}
+                aria-label="Campo de busca"
+                className="w-[385px]"
+                endAction={
+                  <CircleButton
+                    type="submit"
+                    aria-label="Pesquisar"
+                    density="small"
+                  >
+                    <IconSearch />
+                  </CircleButton>
+                }
+              />
             </form>
           )}
         </div>
