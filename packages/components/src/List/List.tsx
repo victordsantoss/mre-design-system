@@ -29,6 +29,7 @@ import { cn } from '../utils/cn'
 import { Divider } from '../Divider'
 import { ListContext, type ListOrientation } from '../utils/ListContext'
 import type { ItemDensity } from '../Item'
+import { Typography } from '../Typography/Typography'
 
 /* ------------------------------------------------------------------ tipos */
 
@@ -137,12 +138,11 @@ export const ListHeader = React.forwardRef<HTMLDivElement, ListHeaderProps>(
         ref={ref}
         role="heading"
         aria-level={level}
-        className={cn(
-          'px-4 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground',
-          className,
-        )}
+        className={cn('px-4 py-2', className)}
       >
-        {children}
+        <Typography variant="overline" color="muted" className="tracking-wider" style={{ fontSize: undefined }}>
+          {children}
+        </Typography>
       </div>
     )
   },
@@ -158,12 +158,11 @@ export const ListLabel = React.forwardRef<HTMLLIElement, ListLabelProps>(
       <li
         ref={ref}
         role="presentation"
-        className={cn(
-          'px-4 pb-1 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground',
-          className,
-        )}
+        className={cn('px-4 pb-1 pt-3', className)}
       >
-        {children}
+        <Typography variant="overline" color="muted" className="tracking-wider" style={{ fontSize: undefined }}>
+          {children}
+        </Typography>
       </li>
     )
   },

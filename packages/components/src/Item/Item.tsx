@@ -23,6 +23,7 @@ import * as React from 'react'
 import { cn } from '../utils/cn'
 import { Divider } from '../Divider'
 import { ListContext } from '../utils/ListContext'
+import { Typography } from '../Typography/Typography'
 
 /* ------------------------------------------------------------------ tipos */
 
@@ -142,7 +143,7 @@ export const Item = React.forwardRef<HTMLElement, ItemProps>(
     /* Conteúdo interno: itens com onToggle ganham chevron automático */
     const inner = (
       <span className="flex w-full items-center gap-3">
-        <span className="min-w-0 flex-1">{children}</span>
+        <Typography variant="body1" as="span" color="inherit" className="min-w-0 flex-1">{children}</Typography>
         {onToggle != null && (
           <svg
             className={cn(

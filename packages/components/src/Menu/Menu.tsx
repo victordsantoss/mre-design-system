@@ -29,6 +29,8 @@ import { cn } from '../utils/cn'
 import { Item } from '../Item'
 import { Divider } from '../Divider'
 import { MenuDrawerSurface } from './MenuDrawerSurface'
+import { Button, CircleButton } from '../Button/Button'
+import { Typography } from '../Typography/Typography'
 
 /* ------------------------------------------------------------------ tipos */
 
@@ -156,14 +158,13 @@ function SideMenuBackButton({
   onBack: () => void
 }) {
   return (
-    <button
-      type="button"
+    <Button
+      emphasis="tertiary"
+      block
       onClick={onBack}
       className={cn(
-        'flex w-full items-center gap-3 border-b border-border bg-background px-4 text-left font-semibold text-primary',
+        'justify-start rounded-none border-b border-border bg-background px-4 gap-3',
         DENSITY_PY[density],
-        'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]',
-        'hover:bg-primary/[0.08]',
       )}
     >
       {/* ← angle-left — lado esquerdo (row-reverse do GovBR DS) */}
@@ -173,8 +174,10 @@ function SideMenuBackButton({
           {item.icon}
         </span>
       )}
-      <span className="flex-1 text-base">{item.label}</span>
-    </button>
+      <Typography variant="body1" as="span" color="inherit" style={{ fontSize: undefined }} className="flex-1 text-base">
+        {item.label}
+      </Typography>
+    </Button>
   )
 }
 
@@ -237,9 +240,15 @@ function MenuItemInternal({
           {item.icon}
         </span>
       ) : null}
-      <span className={cn('min-w-0 flex-1 text-base leading-snug', active ? 'font-semibold' : 'font-normal')}>
+      <Typography
+        variant="body1"
+        as="span"
+        color="inherit"
+        style={{ fontSize: undefined }}
+        className={cn('min-w-0 flex-1 text-base leading-snug', active ? 'font-semibold' : 'font-normal')}
+      >
         {item.label}
-      </span>
+      </Typography>
       {item.shortcut ? (
         <span className="shrink-0 text-xs text-muted-foreground" aria-hidden="true">
           {item.shortcut}
@@ -502,9 +511,9 @@ export function Menu({
           <div className="min-w-0 flex-1">
             {headerBar.logo}
             {headerBar.title ? (
-              <p id={titleId} className="font-heading text-up-01 font-semibold text-foreground">
+              <Typography id={titleId} variant="h5" as="p" weight="semibold">
                 {headerBar.title}
-              </p>
+              </Typography>
             ) : (
               <span id={titleId} className="sr-only">
                 {title ?? 'Menu'}
@@ -513,15 +522,14 @@ export function Menu({
           </div>
           {/* ─── Área 4 — Botão fechar ─── */}
           {headerBar.showClose ? (
-            <button
+            <CircleButton
               ref={closeRef}
-              type="button"
+              density="small"
               aria-label="Fechar menu"
               onClick={onClose}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-[4px]"
             >
               <CloseIcon />
-            </button>
+            </CircleButton>
           ) : null}
         </div>
       ) : null}
@@ -578,15 +586,16 @@ export function Menu({
               {fi > 0 && <Divider className="my-0" />}
 
               {folder.title ? (
-                <p
-                  className={cn(
-                    'px-4 pb-1 font-heading text-xs font-semibold uppercase tracking-wide text-muted-foreground',
-                    fi > 0 ? 'pt-3' : 'pt-2',
-                  )}
+                <Typography
+                  variant="overline"
+                  as="p"
+                  color="muted"
+                  style={{ fontSize: undefined }}
+                  className={cn('px-4 pb-1 tracking-wide', fi > 0 ? 'pt-3' : 'pt-2')}
                   aria-hidden="true"
                 >
                   {folder.title}
-                </p>
+                </Typography>
               ) : null}
 
               <ul
