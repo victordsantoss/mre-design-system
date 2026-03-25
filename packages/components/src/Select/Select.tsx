@@ -9,6 +9,7 @@
 import * as React from 'react'
 import { cn } from '../utils/cn'
 import type { InputDensity, InputStatus } from '../Input/Input'
+import { Message } from '../Message/Message'
 
 // ─────────────────────────────────────────────
 // Tipos públicos
@@ -49,52 +50,11 @@ const DENSITY_HEIGHT: Record<InputDensity, string> = {
   large:  'h-12 min-h-12',
 }
 
-const STATUS_HELPER_COLOR: Record<InputStatus, string> = {
-  success: 'text-success',
-  error:   'text-destructive',
-  warning: 'text-[color:var(--color-warning-readable-on-light)]',
-  info:    'text-info',
-}
-
 const STATUS_BORDER_COLOR: Record<InputStatus, string> = {
   success: 'border-success focus:border-success',
   error:   'border-destructive focus:border-destructive',
   warning: 'border-warning focus:border-warning',
   info:    'border-info focus:border-info',
-}
-
-const StatusIcons = {
-  success: ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      className={cn('h-4 w-4 shrink-0', className)} aria-hidden="true">
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
-    </svg>
-  ),
-  error: ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      className={cn('h-4 w-4 shrink-0', className)} aria-hidden="true">
-      <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" />
-      <line x1="12" y1="16" x2="12.01" y2="16" />
-    </svg>
-  ),
-  warning: ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      className={cn('h-4 w-4 shrink-0', className)} aria-hidden="true">
-      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-      <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
-    </svg>
-  ),
-  info: ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      className={cn('h-4 w-4 shrink-0', className)} aria-hidden="true">
-      <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12.01" y2="8" />
-    </svg>
-  ),
 }
 
 // Seta SVG do select
@@ -138,7 +98,6 @@ function SelectInner<T extends string | number = string>(
 
   const isError      = status === 'error'
   const feedbackText = statusMessage ?? helperText
-  const StatusIcon   = status ? StatusIcons[status] : null
 
   const heightClass = highlight
     ? 'h-14 min-h-14'
@@ -225,16 +184,14 @@ function SelectInner<T extends string | number = string>(
           </span>
         </div>
 
-        {feedbackText && (
-          <p
-            id={helperId}
-            className={cn(
-              'flex items-center gap-1 text-base',
-              status ? STATUS_HELPER_COLOR[status] : 'text-muted-foreground',
-            )}
-          >
-            {StatusIcon && <StatusIcon />}
+        {status && feedbackText && (
+          <Message id={helperId} variant="feedback" severity={status}>
             {feedbackText}
+          </Message>
+        )}
+        {!status && helperText && (
+          <p id={helperId} className="text-base text-muted-foreground">
+            {helperText}
           </p>
         )}
       </div>
